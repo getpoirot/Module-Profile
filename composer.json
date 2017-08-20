@@ -8,9 +8,9 @@
       }
     ]
     , "require": {
-        "poirot/skeleton": "dev-master"
-      , "poirot/mod-driver_mongo": "dev-master"
-      , "poirot/client-oauth2": "dev-master"
+        "poirot/skeleton": "dev-devel"
+      , "poirot/mod-driver_mongo": "dev-devel"
+      , "poirot/client-oauth2": "dev-devel"
     }
     , "autoload"  : {
       "psr-4": {
