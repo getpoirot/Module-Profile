@@ -1,0 +1,23 @@
+{
+    "name": "poirot/mod-profile"
+    , "description": "Profile And Memberships System."
+    , "authors": [
+      {
+          "name": "Payam Naderi"
+          , "email": "naderi.payam@gmail.com"
+      }
+    ]
+    , "require": {
+        "poirot/skeleton": "dev-master"
+      , "poirot/mod-driver_mongo": "dev-master"
+      , "poirot/client-oauth2": "dev-master"
+    }
+    , "autoload"  : {
+      "psr-4": {
+        "Module\\Profile\\": "src/"
+      },
+      "files": [
+        "src/_functions.php"
+      ]
+    }
+}
