@@ -1,7 +1,6 @@
 <?php
 namespace Module\Profile
 {
-    use Module\Content\Services\ServiceClientTender;
     use Poirot\Application\aSapi;
     use Poirot\Application\Interfaces\iApplication;
     use Poirot\Application\Interfaces\Sapi;
@@ -15,17 +14,6 @@ namespace Module\Profile
 
 
     /**
-     * - Using Mongo Db To Store Content.
-     *
-     *   @see mod-content.conf.php
-     *
-     *
-     * - Using Tender-Bin Storage For Files.
-     *   through http client-tenderBin
-     *
-     *   also using oauth-client.
-     *
-     *   @see ServiceClientTender
      *
      */
     class Module implements Sapi\iSapiModule
@@ -36,7 +24,7 @@ namespace Module\Profile
         , Sapi\Module\Feature\iFeatureModuleNestServices
         , Sapi\Module\Feature\iFeatureOnPostLoadModulesGrabServices
     {
-        const CONF = 'module.content';
+        const CONF = 'module.profile';
 
 
         /**
@@ -95,7 +83,7 @@ namespace Module\Profile
          */
         function initConfig(iDataEntity $config)
         {
-            return \Poirot\Config\load(__DIR__ . '/../../config/mod-content');
+            return \Poirot\Config\load(__DIR__ . '/../config/mod-profile');
         }
 
         /**
@@ -109,7 +97,7 @@ namespace Module\Profile
          */
         function getActions()
         {
-            return \Poirot\Config\load(__DIR__ . '/../../config/mod-content.actions');
+            return \Poirot\Config\load(__DIR__ . '/../config/mod-profile.actions');
         }
 
         /**
@@ -126,7 +114,7 @@ namespace Module\Profile
          */
         function getServices(Container $moduleContainer = null)
         {
-            $conf = \Poirot\Config\load(__DIR__ . '/../../config/mod-content.services');
+            $conf = \Poirot\Config\load(__DIR__ . '/../config/mod-profile.services');
             return $conf;
         }
 
@@ -146,66 +134,11 @@ namespace Module\Profile
         ) {
             # Register Http Routes:
             if ($router) {
-                $routes = include __DIR__ . '/../../config/mod-content.routes.conf.php';
+                $routes = include __DIR__ . '/../config/mod-profile.routes.conf.php';
                 $buildRoute = new BuildRouterStack;
                 $buildRoute->setRoutes($routes);
                 $buildRoute->build($router);
             }
         }
     }
-
-}
-
-
-namespace Module\Content\Actions
-{
-    use Module\Content\Actions\Comments\AddCommentOnPostAction;
-    use Module\Content\Actions\Comments\ListCommentsOfPostAction;
-    use Module\Content\Actions\Comments\RemoveCommentFromPostAction;
-    use Module\Content\Actions\Likes\LikePostAction;
-    use Module\Content\Actions\Likes\ListPostLikesAction;
-    use Module\Content\Actions\Likes\ListPostsWhichUserLikedAction;
-    use Module\Content\Actions\Likes\UnLikePostAction;
-    use Module\Content\Actions\Posts\BrowsePostsAction;
-    use Module\Content\Actions\Posts\CreatePostAction;
-    use Module\Content\Actions\Posts\DeletePostAction;
-    use Module\Content\Actions\Posts\EditPostAction;
-    use Module\Content\Actions\Posts\ListPostsOfMeAction;
-    use Module\Content\Actions\Posts\ListPostsOfUserAction;
-    use Module\Content\Actions\Posts\RetrievePostAction;
-
-
-    /**
-     * @property CreatePostAction      $CreatePostAction
-     * @property EditPostAction        $EditPostAction
-     * @property DeletePostAction      $DeletePostAction
-     * @property RetrievePostAction    $RetrievePostAction
-     * @property ListPostsOfMeAction   $ListPostsOfMeAction
-     * @property ListPostsOfUserAction $ListPostsOfUserAction
-     * @property BrowsePostsAction     $BrowsePostsAction
-     *
-     * @property LikePostAction                $LikePostAction
-     * @property UnLikePostAction              $UnLikePostAction
-     * @property ListPostLikesAction           $ListPostLikesAction
-     * @property ListPostsWhichUserLikedAction $ListPostsWhichUserLikedAction
-     *
-     * @property AddCommentOnPostAction      $AddCommentOnPostAction
-     * @property RemoveCommentFromPostAction $RemoveCommentFromPostAction
-     * @property ListCommentsOfPostAction    $ListCommentsOfPostAction
-     *
-     */
-    class IOC extends \IOC
-    { }
-}
-
-namespace Module\Content\Services
-{
-    use Poirot\TenderBinClient\Client;
-
-    /**
-     * @method static ContainerCappedContentObject ContentObjectContainer()
-     * @method static Client ClientTender()
-     */
-    class IOC extends \IOC
-    { }
 }
