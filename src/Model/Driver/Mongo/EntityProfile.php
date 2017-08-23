@@ -56,6 +56,43 @@ class EntityProfile
         return parent::getDateTimeCreated();
     }
 
+    /**
+     * Set Created Date
+     *
+     * @param UTCDatetime $date
+     *
+     * @return $this
+     */
+    function setBirthdayMongo(UTCDatetime $date)
+    {
+        $this->setBirthday($date->toDateTime());
+        return $this;
+    }
+
+    /**
+     * Get Created Date
+     * note: persist when serialize
+     *
+     * @return UTCDatetime|null
+     */
+    function getBirthdayMongo()
+    {
+        if ($dateTime = $this->getBirthday())
+            return new UTCDatetime($dateTime->getTimestamp() * 1000);
+
+    }
+
+    /**
+     * @override Ignore from persistence
+     * @ignore
+     *
+     * @return \DateTime|null
+     */
+    function getBirthday()
+    {
+        return parent::getBirthday();
+    }
+
 
     // ...
 

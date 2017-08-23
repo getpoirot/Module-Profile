@@ -6,7 +6,9 @@ use Module\Profile\Model\Driver\Mongo;
 
 use Module\MongoDriver\Model\Repository\aRepository;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
+use Module\Profile\Model\Entity\EntityProfile;
 use MongoDB\BSON\ObjectID;
+use MongoDB\Operation\FindOneAndUpdate;
 
 
 class ProfilesRepo
@@ -54,26 +56,34 @@ class ProfilesRepo
      */
     function save(iEntityProfile $profileEntity)
     {
-        if ($entity->getUid()) {
-            // It Must Be Update
+        $entity = new Mongo\EntityProfile();
+        $entity->setUid( $this->attainNextIdentifier($profileEntity->getUid()) );
+        $entity->setLocation( $profileEntity->getLocation() );
+        $entity->setGender( $profileEntity->getGender() );
+        $entity->setBirthday( $profileEntity->getBirthday() );
+        $entity->setDateTimeCreated( $profileEntity->getDateTimeCreated() );
 
-            /* Currently With Version 1.1.2 Of MongoDB driver library
-             * Entity Not Replaced Entirely
-             *
-             * $this->_query()->updateOne(
-                [
-                    '_id' => $entity->getUid(),
-                ]
-                , $entity
-                , ['upsert' => true]
-            );*/
+        /** @var \Module\Profile\Model\Driver\Mongo\EntityProfile $entity */
+        $entity = $this->_query()->findOneAndUpdate(
+            [
+                'uid' => $this->attainNextIdentifier( $entity->getUid() ),
+            ]
+            , [
+                '$set' => $entity,
+            ]
+            , [ 'upsert' => true, 'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER, ]
+        );
 
-            $this->_query()->deleteOne([
-                '_id' => $this->attainNextIdentifier( $entity->getUid() ),
-            ]);
-        }
 
-        $entity = $this->insert($entity);
+        $rEntity = new EntityProfile;
+        $rEntity
+            ->setUid( $entity->getUid() )
+            ->setLocation( $entity->getLocation() )
+            ->setGender( $entity->getGender() )
+            ->setBirthday( $entity->getBirthday() )
+            ->setDateTimeCreated( $entity->getDateTimeCreated() )
+        ;
+
         return $entity;
     }
 }

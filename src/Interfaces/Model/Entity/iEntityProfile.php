@@ -1,6 +1,8 @@
 <?php
 namespace Module\Profile\Interfaces\Model\Entity;
 
+use Module\Profile\Model\Entity\Profile\GeoObject;
+
 
 interface iEntityProfile
 {
@@ -10,6 +12,27 @@ interface iEntityProfile
      * @return mixed
      */
     function getUid();
+
+    /**
+     * Get User Last Location
+     *
+     * @return GeoObject
+     */
+    function getLocation();
+
+    /**
+     * Get Gender
+     *
+     * @return string
+     */
+    function getGender();
+
+    /**
+     * Get Birthday
+     *
+     * @return \DateTime|null
+     */
+    function getBirthday();
 
     /**
      * Get Date Time Created
