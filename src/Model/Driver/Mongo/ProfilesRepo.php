@@ -58,10 +58,13 @@ class ProfilesRepo
     {
         $entity = new Mongo\EntityProfile();
         $entity->setUid( $this->attainNextIdentifier($profileEntity->getUid()) );
+        $entity->setBio( $profileEntity->getBio() );
         $entity->setLocation( $profileEntity->getLocation() );
         $entity->setGender( $profileEntity->getGender() );
         $entity->setBirthday( $profileEntity->getBirthday() );
         $entity->setDateTimeCreated( $profileEntity->getDateTimeCreated() );
+
+
 
         /** @var \Module\Profile\Model\Driver\Mongo\EntityProfile $entity */
         $entity = $this->_query()->findOneAndUpdate(
@@ -78,6 +81,7 @@ class ProfilesRepo
         $rEntity = new EntityProfile;
         $rEntity
             ->setUid( $entity->getUid() )
+            ->setBio( $entity->getBio() )
             ->setLocation( $entity->getLocation() )
             ->setGender( $entity->getGender() )
             ->setBirthday( $entity->getBirthday() )

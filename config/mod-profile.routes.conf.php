@@ -24,9 +24,36 @@ return [
 
         'routes' => [
 
+            'avatars' => [
+                'route' => 'RouteSegment',
+                'options' => [
+                    'criteria'    => '/avatars',
+                    'match_whole' => false,
+                ],
+                'routes' =>
+                    [
+                        ## POST /profile/avatars/
+                        #- Upload Avatar Profile Picture(s)
+                        'create' => [
+                            'route'   => 'RouteMethodSegment',
+                            'options' => [
+                                'criteria'    => '/',
+                                'method'      => 'POST',
+                                'match_whole' => true,
+                            ],
+                            'params'  => [
+                                ListenerDispatch::ACTIONS => [
+                                    '/module/profile/actions/UploadAvatarAction',
+                                ],
+                            ],
+                        ],
+
+                    ], // end avatars routes
+            ], // end avatars
+
             ## POST /profile
             #- register user profile data
-            'post' => [
+            'create' => [
                 'route'   => 'RouteMethodSegment',
                 'options' => [
                     // 24 is length of content_id by persistence

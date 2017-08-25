@@ -6,14 +6,16 @@ use Module\Profile\Model\Entity\Profile\GeoObject;
 use Poirot\Std\Hydrator\aHydrateEntity;
 
 
-class HydrateEntityProfile
+class ProfileHydrate
     extends aHydrateEntity
     implements iEntityProfile
 {
+    const FIELD_BIO      = 'bio';
     const FIELD_LOCATION = 'location';
     const FIELD_GENDER   = 'gender';
     const FIELD_BIRTHDAY = 'birthday';
 
+    protected $bio;
     protected $location;
     protected $gender;
     protected $birthday;
@@ -21,6 +23,11 @@ class HydrateEntityProfile
 
 
     // Setter Options:
+
+    function setBio($bioText)
+    {
+        $this->bio = (string) $bioText;
+    }
 
     /**
      * @param mixed $location
@@ -60,6 +67,16 @@ class HydrateEntityProfile
     }
 
     /**
+     * Get Bio Text Description
+     *
+     * @return string|null
+     */
+    function getBio()
+    {
+        return $this->bio;
+    }
+
+    /**
      * Get User Last Location
      *
      * @return GeoObject
@@ -82,7 +99,7 @@ class HydrateEntityProfile
      */
     function getGender()
     {
-        return ($this->gender) ? $this->gender : null;
+        return ( ($this->gender) ? (string) $this->gender : null );
     }
 
     /**
@@ -92,7 +109,7 @@ class HydrateEntityProfile
      */
     function getBirthday()
     {
-        return ($this->birthday) ? new \Datetime($this->birthday) : null;
+        return ( ($this->birthday) ? new \Datetime($this->birthday) : null );
     }
 
     /**

@@ -14,6 +14,13 @@ interface iEntityProfile
     function getUid();
 
     /**
+     * Get Bio Text Description
+     *
+     * @return string|null
+     */
+    function getBio();
+
+    /**
      * Get User Last Location
      *
      * @return GeoObject

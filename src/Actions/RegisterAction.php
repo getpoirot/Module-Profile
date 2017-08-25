@@ -4,9 +4,11 @@ namespace Module\Profile\Actions;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityProfile;
-use Module\Profile\Model\HydrateEntityProfile;
+use Module\Profile\Model\ProfileHydrate;
+use Module\Profile\Model\ProfileValidate;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\Std\Exceptions\exUnexpectedValue;
 
 
 class RegisterAction
@@ -36,6 +38,7 @@ class RegisterAction
      * @param iAccessToken $token
      *
      * @return array
+     * @throws \Exception
      */
     function __invoke($token = null)
     {
@@ -44,18 +47,29 @@ class RegisterAction
         $this->assertTokenByOwnerAndScope($token);
 
 
-        # Create Profile Entity From Http Request
-        #
-        $hydrate = new HydrateEntityProfile(
-            HydrateEntityProfile::parseWith($this->request)
-        );
+        try {
 
-        $entity = new EntityProfile($hydrate);
-        $entity->setUid( $token->getOwnerIdentifier() ); // Set User Who Has Own Profile!!
+            # Create Profile Entity From Http Request
+            #
+            $hydrate = new ProfileHydrate(
+                ProfileHydrate::parseWith($this->request)
+            );
 
 
-        // TODO Validate Entity
-        
+            $entity = new EntityProfile($hydrate);
+            $entity->setUid( $token->getOwnerIdentifier() ); // Set User Who Has Own Profile!!
+
+            __(new ProfileValidate($entity))
+                ->assertValidate();
+
+        } catch (exUnexpectedValue $e) {
+            // TODO Handle Validation ...
+            throw new exUnexpectedValue('Validation Failed', null,  400, $e);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
 
         # Persist Profile
         #

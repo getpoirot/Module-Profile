@@ -16,7 +16,8 @@ namespace Module\Profile
         return [
             'profile' => [
                 'uid'        => (string) $profile->getUid(),
-                'gender'     => $profile->getGender(),
+                'bio'        => (string) $profile->getBio(),
+                'gender'     => (string) $profile->getGender(),
                 'location'   => ($profile->getLocation()) ? [
                     'caption' => $profile->getLocation()->getCaption(),
                     'geo'     => [

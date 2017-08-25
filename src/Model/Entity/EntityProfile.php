@@ -3,11 +3,11 @@ namespace Module\Profile\Model\Entity;
 
 use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
 use Module\Profile\Model\Entity\Profile\GeoObject;
-use Poirot\Std\Struct\DataOptionsOpen;
+use Poirot\Std\Struct\aDataOptions;
 
 
 class EntityProfile
-    extends DataOptionsOpen
+    extends aDataOptions
     implements iEntityProfile
 {
     const GENDER_MALE   = 'male';
@@ -15,6 +15,7 @@ class EntityProfile
 
 
     protected $uid;
+    protected $bio;
     /** @var GeoObject */
     protected $location;
     /** @var string */
@@ -46,6 +47,29 @@ class EntityProfile
     function getUid()
     {
         return $this->uid;
+    }
+
+    /**
+     * Set Bio Description
+     *
+     * @param string|null $description
+     *
+     * @return $this
+     */
+    function setBio($description)
+    {
+        $this->bio = $description;
+        return $this;
+    }
+
+    /**
+     * Get Bio Text Description
+     *
+     * @return string|null
+     */
+    function getBio()
+    {
+        return ( ($this->bio !== null) ? (string) $this->bio : null );
     }
 
     /**
@@ -87,18 +111,18 @@ class EntityProfile
      */
     function setGender($gender)
     {
-        $this->gender = (string) $gender;
+        $this->gender = $gender;
         return $this;
     }
 
     /**
      * Get Gender
      *
-     * @return string
+     * @return string|null
      */
     function getGender()
     {
-        return $this->gender;
+        return ( ($this->gender) ? (string) $this->gender : null );
     }
 
     /**

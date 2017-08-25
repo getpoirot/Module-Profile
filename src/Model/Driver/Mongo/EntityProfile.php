@@ -15,8 +15,26 @@ class EntityProfile
 {
     use tPersistable;
 
+    /** @var  \MongoId */
+    protected $_id;
 
-    // Mongonize DateCreated
+
+    // Mongonize Options
+
+    function set_Id($id)
+    {
+        $this->_id = $id;
+    }
+
+    function get_Id()
+    {
+        return $this->_id;
+    }
+
+    function set__Pclass()
+    {
+        // Ignore Values
+    }
 
     /**
      * Set Created Date
