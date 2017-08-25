@@ -20,6 +20,18 @@ return [
                         ['key' => ['_id' => 1]],
                         // TODO Put Indexes
                     ],],],
+
+            \Module\Profile\Model\Driver\Mongo\AvatarsRepoService::class => [
+                'collection' => [
+                    // query on which collection
+                    'name' => 'profile.users.avatars',
+                    // which client to connect and query with
+                    'client' => 'master',
+                    // ensure indexes
+                    'indexes' => [
+                        ['key' => ['_id' => 1]],
+                        // TODO Put Indexes
+                    ],],],
         ],
     ],
 ];

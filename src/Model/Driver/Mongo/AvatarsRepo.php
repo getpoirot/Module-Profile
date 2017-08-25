@@ -1,20 +1,22 @@
 <?php
 namespace Module\Profile\Model\Driver\Mongo;
 
-use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
+use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Module\Profile\Model\Driver\Mongo;
-
 use Module\MongoDriver\Model\Repository\aRepository;
-use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
-use Module\Profile\Model\Entity\EntityProfile;
+use Module\Profile\Model\Entity\EntityAvatar;
 use MongoDB\BSON\ObjectID;
 use MongoDB\Operation\FindOneAndUpdate;
 
 
-class ProfilesRepo
+class AvatarsRepo
     extends aRepository
-    implements iRepoProfiles
+    implements iRepoAvatars
 {
+    protected $typeMap = [
+        'document' => \MongoDB\Model\BSONArray::class , // !! traversable object to fully serialize to array
+    ];
+
     /**
      * Initialize Object
      *
@@ -22,9 +24,8 @@ class ProfilesRepo
     protected function __init()
     {
         if (! $this->persist )
-            $this->setModelPersist(new Mongo\EntityProfile);
+            $this->setModelPersist( new Mongo\EntityAvatar );
     }
-
 
     /**
      * Generate next unique identifier to persist
@@ -50,42 +51,34 @@ class ProfilesRepo
     /**
      * Save Entity By Insert Or Update
      *
-     * @param iEntityProfile $profileEntity
+     * @param EntityAvatar $entity
      *
-     * @return iEntityProfile
+     * @return EntityAvatar
      */
-    function save(iEntityProfile $profileEntity)
+    function save(EntityAvatar $entity)
     {
-        $entity = new Mongo\EntityProfile();
-        $entity->setUid( $this->attainNextIdentifier($profileEntity->getUid()) );
-        $entity->setBio( $profileEntity->getBio() );
-        $entity->setLocation( $profileEntity->getLocation() );
-        $entity->setGender( $profileEntity->getGender() );
-        $entity->setBirthday( $profileEntity->getBirthday() );
-        $entity->setDateTimeCreated( $profileEntity->getDateTimeCreated() );
+        $e = new Mongo\EntityAvatar;
+        $e
+            ->setUid( $this->attainNextIdentifier($entity->getUid()) )
+            ->setMedias( $entity->getMedias() )
+        ;
 
-
-
-        /** @var \Module\Profile\Model\Driver\Mongo\EntityProfile $entity */
+        /** @var Mongo\EntityAvatar $entity */
         $entity = $this->_query()->findOneAndUpdate(
             [
                 'uid' => $this->attainNextIdentifier( $entity->getUid() ),
             ]
             , [
-                '$set' => $entity,
+                '$set' => $e,
             ]
             , [ 'upsert' => true, 'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER, ]
         );
 
 
-        $rEntity = new EntityProfile;
+        $rEntity = new EntityAvatar;
         $rEntity
             ->setUid( $entity->getUid() )
-            ->setBio( $entity->getBio() )
-            ->setLocation( $entity->getLocation() )
-            ->setGender( $entity->getGender() )
-            ->setBirthday( $entity->getBirthday() )
-            ->setDateTimeCreated( $entity->getDateTimeCreated() )
+            ->setMedias( $entity->getMedias() )
         ;
 
         return $rEntity;

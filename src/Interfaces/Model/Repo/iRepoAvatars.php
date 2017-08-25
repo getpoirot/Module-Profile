@@ -1,10 +1,10 @@
 <?php
 namespace Module\Profile\Interfaces\Model\Repo;
 
-use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
+use Module\Profile\Model\Entity\EntityAvatar;
 
 
-interface iRepoProfiles
+interface iRepoAvatars
 {
     /**
      * Generate next unique identifier to persist
@@ -16,12 +16,13 @@ interface iRepoProfiles
      */
     function attainNextIdentifier($id = null);
 
+
     /**
      * Save Entity By Insert Or Update
      *
-     * @param iEntityProfile $profileEntity
+     * @param EntityAvatar $entity
      *
-     * @return iEntityProfile
+     * @return EntityAvatar
      */
-    function save(iEntityProfile $profileEntity);
+    function save(EntityAvatar $entity);
 }

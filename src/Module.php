@@ -67,6 +67,10 @@ namespace Module\Profile
                 // Load OAuth2 Client To Assert Tokens.
                 $moduleManager->loadModule('OAuth2Client');
 
+            if (!$moduleManager->hasLoaded('TenderBinClient'))
+                // Module Is Required.
+                $moduleManager->loadModule('TenderBinClient');
+
         }
 
         /**
