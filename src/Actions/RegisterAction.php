@@ -59,6 +59,10 @@ class RegisterAction
             $entity = new EntityProfile($hydrate);
             $entity->setUid( $token->getOwnerIdentifier() ); // Set User Who Has Own Profile!!
 
+
+            // TODO Inject display name from oauth server if not given
+
+
             __(new ProfileValidate($entity))
                 ->assertValidate();
 

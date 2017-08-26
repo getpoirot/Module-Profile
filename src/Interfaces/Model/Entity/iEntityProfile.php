@@ -14,6 +14,13 @@ interface iEntityProfile
     function getUid();
 
     /**
+     * Get Display Name
+     *
+     * @return string
+     */
+    function getDisplayName();
+
+    /**
      * Get Bio Text Description
      *
      * @return string|null

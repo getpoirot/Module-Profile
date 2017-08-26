@@ -1,11 +1,11 @@
 <?php
 namespace Module\Profile
 {
-
     use Module\Profile\Model\Entity\Avatars\MediaObjectTenderBin;
     use Module\Profile\Model\Entity\EntityProfile;
     use Poirot\Std\Type\StdArray;
     use Poirot\Std\Type\StdTravers;
+
 
     /**
      * Build Array Response From Given Entity Object
@@ -19,6 +19,7 @@ namespace Module\Profile
         return [
             'profile' => [
                 'uid'        => (string) $profile->getUid(),
+                'display_name' => (string) $profile->getDisplayName(),
                 'bio'        => (string) $profile->getBio(),
                 'gender'     => (string) $profile->getGender(),
                 'location'   => ($profile->getLocation()) ? [

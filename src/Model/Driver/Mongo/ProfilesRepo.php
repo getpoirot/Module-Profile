@@ -58,6 +58,7 @@ class ProfilesRepo
     {
         $entity = new Mongo\EntityProfile();
         $entity->setUid( $this->attainNextIdentifier($profileEntity->getUid()) );
+        $entity->setDisplayName( $profileEntity->getDisplayName() );
         $entity->setBio( $profileEntity->getBio() );
         $entity->setLocation( $profileEntity->getLocation() );
         $entity->setGender( $profileEntity->getGender() );
@@ -81,6 +82,7 @@ class ProfilesRepo
         $rEntity = new EntityProfile;
         $rEntity
             ->setUid( $entity->getUid() )
+            ->setDisplayName( $entity->getDisplayName() )
             ->setBio( $entity->getBio() )
             ->setLocation( $entity->getLocation() )
             ->setGender( $entity->getGender() )

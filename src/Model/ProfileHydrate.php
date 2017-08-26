@@ -10,11 +10,13 @@ class ProfileHydrate
     extends aHydrateEntity
     implements iEntityProfile
 {
-    const FIELD_BIO      = 'bio';
-    const FIELD_LOCATION = 'location';
-    const FIELD_GENDER   = 'gender';
-    const FIELD_BIRTHDAY = 'birthday';
+    const FIELD_DISPLAY_NAME = 'bio';
+    const FIELD_BIO          = 'bio';
+    const FIELD_LOCATION     = 'location';
+    const FIELD_GENDER       = 'gender';
+    const FIELD_BIRTHDAY     = 'birthday';
 
+    protected $displayName;
     protected $bio;
     protected $location;
     protected $gender;
@@ -23,6 +25,11 @@ class ProfileHydrate
 
 
     // Setter Options:
+
+    function setDisplayName($name)
+    {
+        $this->displayName = (string) $name;
+    }
 
     function setBio($bioText)
     {
@@ -64,6 +71,16 @@ class ProfileHydrate
     function getUid()
     {
         // Has No Implementation
+    }
+
+    /**
+     * Display Name
+     *
+     * @return string|null
+     */
+    function getDisplayName()
+    {
+        return $this->displayName;
     }
 
     /**

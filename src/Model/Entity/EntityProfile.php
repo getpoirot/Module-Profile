@@ -15,6 +15,7 @@ class EntityProfile
 
 
     protected $uid;
+    protected $displayName;
     protected $bio;
     /** @var GeoObject */
     protected $location;
@@ -47,6 +48,29 @@ class EntityProfile
     function getUid()
     {
         return $this->uid;
+    }
+
+    /**
+     * Set Display Name
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    function setDisplayName($name)
+    {
+        $this->displayName = (string) $name;
+        return $this;
+    }
+
+    /**
+     * Get Display Name
+     *
+     * @return string
+     */
+    function getDisplayName()
+    {
+        return $this->displayName;
     }
 
     /**
