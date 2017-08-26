@@ -46,6 +46,7 @@ class RegisterAction
         #
         $this->assertTokenByOwnerAndScope($token);
 
+        $uid = $token->getOwnerIdentifier();
 
         try {
 
@@ -55,12 +56,29 @@ class RegisterAction
                 ProfileHydrate::parseWith($this->request)
             );
 
+            $displayName = $hydrate->getDisplayName();
+            if (empty($displayName)) {
+                // Retrieve Name From OAuth
+                $displayName = \Poirot\Std\catchIt(function() use ($uid) {
+                    $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($uid) {
+                        $info = \Module\OAuth2Client\Services::OAuthFederate()
+                            ->getAccountInfoByUid($uid);
+
+                        return $info['user']['fullname'];
+                    });
+
+                    return $nameFromOAuthServer;
+
+                }, function () {
+                    return '';
+                });
+
+
+                $hydrate->setDisplayName($displayName);
+            }
 
             $entity = new EntityProfile($hydrate);
-            $entity->setUid( $token->getOwnerIdentifier() ); // Set User Who Has Own Profile!!
-
-
-            // TODO Inject display name from oauth server if not given
+            $entity->setUid( $uid ); // Set User Who Has Own Profile!!
 
 
             __(new ProfileValidate($entity))
