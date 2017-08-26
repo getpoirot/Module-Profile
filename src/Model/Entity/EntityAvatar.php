@@ -11,6 +11,7 @@ class EntityAvatar
     protected $uid;
     /** @var aMediaObject[]  */
     protected $medias = [];
+    protected $primary;
     /** @var \DateTime */
     protected $datetimeCreated;
 
@@ -36,6 +37,30 @@ class EntityAvatar
     function getUid()
     {
         return $this->uid;
+    }
+
+
+    /**
+     * Set Primary Media By Hash ID
+     *
+     * @param mixed $hash
+     *
+     * @return $this
+     */
+    function setPrimary($hash)
+    {
+        $this->primary = $hash;
+        return $this;
+    }
+
+    /**
+     * Get Primary Media By Hash ID
+     *
+     * @return mixed|null
+     */
+    function getPrimary()
+    {
+        return $this->primary;
     }
 
     /**

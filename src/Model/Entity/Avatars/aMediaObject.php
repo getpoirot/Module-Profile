@@ -12,7 +12,6 @@ class aMediaObject
     /** @var array */
     protected $hash;
     protected $contentType;
-    protected $asPrimary = false;
 
 
     /**
@@ -68,16 +67,5 @@ class aMediaObject
     function getContentType()
     {
         return $this->contentType;
-    }
-
-    function setAsPrimary($flag = true)
-    {
-        $this->asPrimary = (bool) $flag;
-        return $this;
-    }
-
-    function getAsPrimary()
-    {
-        return $this->asPrimary;
     }
 }

@@ -48,6 +48,50 @@ return [
                             ],
                         ],
 
+                        ## GET /profile/avatars/
+                        #- Retrieve Avatar Profile Picture(s)
+                        'retrieve' => [
+                            'route'   => 'RouteMethodSegment',
+                            'options' => [
+                                'criteria'    => '/',
+                                'method'      => 'GET',
+                                'match_whole' => true,
+                            ],
+                            'params'  => [
+                                ListenerDispatch::ACTIONS => [
+                                    '/module/profile/actions/RetrieveAvatarAction',
+                                ],
+                            ],
+                        ],
+
+                        'delegate' => [
+                            'route' => 'RouteSegment',
+                            'options' => [
+                                // 24 is length of content_id by persistence
+                                'criteria'    => '/:hash_id~\w{24}~',
+                                'match_whole' => false,
+                            ],
+                            'routes' => [
+
+                                ## DELETE /profile/avatar/{{hash_id}}
+                                #- Delete an avatar image by currently authenticated user.
+                                'delete' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/',
+                                        'method'      => 'DELETE',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/DeleteAvatarAction',
+                                        ],
+                                    ],
+                                ],
+
+                            ], // end avatars delegate routes
+                        ], // end avatars delegate
+
                     ], // end avatars routes
             ], // end avatars
 
@@ -67,6 +111,63 @@ return [
                     ],
                 ],
             ],
+
+            'delegate' => [
+                'route' => 'RouteSegment',
+                'options' => [
+                    // 24 is length of user_id by persistence
+                    // TODO . in username not matched
+                    'criteria'    => '/<@:username~\w+~><-:userid~\w{24}~>',
+                    'match_whole' => false,
+                ],
+                'routes' => [
+
+                    ## GET /profile/#user_id/profile.jpg
+                    #- Retrieve Avatar Profile Picture(s)
+                    'profile_pic' => [
+                        'route'   => 'RouteMethodSegment',
+                        'options' => [
+                            'criteria'    => '/profile.jpg',
+                            'method'      => 'GET',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/RenderProfilePicAction',
+                            ],
+                        ],
+                    ],
+
+                    'avatars' => [
+                        'route' => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/avatars',
+                            'match_whole' => false,
+                        ],
+                        'routes' =>
+                            [
+
+                                ## GET /profile/#user_id/avatars/
+                                #- Retrieve Avatar Profile Picture(s)
+                                'retrieve' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/',
+                                        'method'      => 'GET',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/RetrieveUserAvatarAction',
+                                        ],
+                                    ],
+                                ],
+
+                            ], // end avatars routes
+                    ], // end avatars
+
+                ], // end avatars delegate routes
+            ], // end avatars delegate
 
         ], // end routes
     ] // end profiles

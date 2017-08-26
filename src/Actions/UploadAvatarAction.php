@@ -4,6 +4,7 @@ namespace Module\Profile\Actions;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Avatars\FactoryMediaObject;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
+use Module\Profile\Model\Entity\Avatars\aMediaObject;
 use Module\Profile\Model\UploadAvatarHydrate;
 use Module\Profile\Model\Entity\EntityAvatar;
 use Poirot\ApiClient\AccessTokenObject;
@@ -71,12 +72,13 @@ class UploadAvatarAction
 
             $entity = new EntityAvatar;
             $entity->setUid( $token->getOwnerIdentifier() );
+            if ($avatar->getAsPrimary())
+                $entity->setPrimary( $binArr['hash'] );
+
             $entity->addMedia(FactoryMediaObject::of([
                 'hash'         => $binArr['hash'],
                 'content_type' => $binArr['content_type'],
-                'as_primaty'   => $avatar->getAsPrimary(),
             ]));
-
 
         } catch (exUnexpectedValue $e) {
             // TODO Handle Validation ...
@@ -91,13 +93,9 @@ class UploadAvatarAction
 
         # Build Response:
         #
-        $medias  = $pEntity->getMedias();
-        $r = \Module\Profile\embedLinkToMediaAvatars($medias);
-
         return [
-            ListenerDispatch::RESULT_DISPATCH => [
-                'medias' => $r,
-            ]
+            ListenerDispatch::RESULT_DISPATCH =>
+                \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($pEntity)
         ];
     }
 }

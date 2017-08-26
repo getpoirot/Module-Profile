@@ -40,6 +40,8 @@ namespace Module\Profile
         ];
     }
 
+
+
     /**
      * Embed Retrieval Http Link To MediaObjects
      *
@@ -77,8 +79,40 @@ namespace Module\Profile\Avatars
 {
     use Module\Profile\Model\Entity\Avatars\aMediaObject;
     use Module\Profile\Model\Entity\Avatars\MediaObjectTenderBin;
+    use Module\Profile\Model\Entity\EntityAvatar;
     use Poirot\Std\Interfaces\Pact\ipFactory;
 
+
+    /**
+     * Build Array Response From Given Entity Object
+     *
+     * @param EntityAvatar $avatars
+     *
+     * @return array
+     */
+    function toArrayResponseFromAvatarEntity(EntityAvatar $avatars = null)
+    {
+        if (null === $avatars) {
+            $p = null;
+            $r = [];
+
+        } else {
+            $r = \Module\Profile\embedLinkToMediaAvatars( $avatars->getMedias() );
+            /** @var aMediaObject $m */
+            $p = current($r); // first as primary profile pic
+            foreach ($r as $m) {
+                if ($m['hash'] !== $avatars->getPrimary())
+                    continue;
+
+                $p = $m;
+            }
+        }
+
+        return [
+            'primary' => $p,
+            'medias'  => $r,
+        ];
+    }
 
     class FactoryMediaObject
         implements ipFactory

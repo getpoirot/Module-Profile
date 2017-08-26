@@ -18,6 +18,15 @@ interface iRepoAvatars
 
 
     /**
+     * Retrieve Avatar Entity By UID
+     *
+     * @param mixed $uid Owner ID
+     *
+     * @return EntityAvatar|null
+     */
+    function findOneByUid($uid);
+
+    /**
      * Save Entity By Insert Or Update
      *
      * @param EntityAvatar $entity
@@ -25,4 +34,14 @@ interface iRepoAvatars
      * @return EntityAvatar
      */
     function save(EntityAvatar $entity);
+
+    /**
+     * Remove an avatar from list by given hash id
+     *
+     * @param mixed $uid
+     * @param mixed $mediaHash
+     *
+     * @return void
+     */
+    function delUserAvatarByHash($uid, $mediaHash);
 }

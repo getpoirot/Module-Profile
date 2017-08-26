@@ -7,6 +7,7 @@ use Module\MongoDriver\Model\Repository\aRepository;
 use Module\Profile\Model\Entity\EntityAvatar;
 use MongoDB\BSON\ObjectID;
 use MongoDB\Operation\FindOneAndUpdate;
+use Poirot\Std\Type\StdTravers;
 
 
 class AvatarsRepo
@@ -47,6 +48,33 @@ class AvatarsRepo
         return $objectId;
     }
 
+    /**
+     * Retrieve Avatar Entity By UID
+     *
+     * @param mixed $uid Owner ID
+     *
+     * @return EntityAvatar|null
+     */
+    function findOneByUid($uid)
+    {
+        $entity = $this->_query()->findOne([
+            'uid' => $this->attainNextIdentifier( $uid ),
+        ]);
+
+
+        if (! $entity )
+            // Not Found ...
+            return null;
+
+        $rEntity = new EntityAvatar;
+        $rEntity
+            ->setUid( $entity->getUid() )
+            ->setPrimary( $entity->getPrimary() )
+            ->setMedias( $entity->getMedias() )
+        ;
+
+        return $rEntity;
+    }
 
     /**
      * Save Entity By Insert Or Update
@@ -60,8 +88,14 @@ class AvatarsRepo
         $e = new Mongo\EntityAvatar;
         $e
             ->setUid( $this->attainNextIdentifier($entity->getUid()) )
+            ->setPrimary( $entity->getPrimary() )
             ->setMedias( $entity->getMedias() )
         ;
+
+
+        $medias = $e->getMedias();
+        foreach ($medias as $i => $m)
+            $medias[$i] = StdTravers::of($m)->toArray();
 
         /** @var Mongo\EntityAvatar $entity */
         $entity = $this->_query()->findOneAndUpdate(
@@ -69,7 +103,16 @@ class AvatarsRepo
                 'uid' => $this->attainNextIdentifier( $entity->getUid() ),
             ]
             , [
-                '$set' => $e,
+                '$set' => [
+                    'uid'     => $this->attainNextIdentifier( $entity->getUid() ),
+                    'primary' => $entity->getPrimary(),
+                ],
+                '$push' => [
+                    'medias' => [
+                        '$each'     => $medias,
+                        '$position' => 0,
+                    ],
+                ],
             ]
             , [ 'upsert' => true, 'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER, ]
         );
@@ -78,9 +121,32 @@ class AvatarsRepo
         $rEntity = new EntityAvatar;
         $rEntity
             ->setUid( $entity->getUid() )
+            ->setPrimary( $entity->getPrimary() )
             ->setMedias( $entity->getMedias() )
         ;
 
         return $rEntity;
+    }
+
+    /**
+     * Remove an avatar from list by given hash id
+     *
+     * @param mixed $uid
+     * @param mixed $mediaHash
+     *
+     * @return void
+     */
+    function delUserAvatarByHash($uid, $mediaHash)
+    {
+        $this->_query()->findOneAndUpdate(
+            [
+                'uid' => $this->attainNextIdentifier( $uid ),
+            ]
+            , [
+                '$pull' => [
+                    'medias' => [ 'hash' => $mediaHash ]
+                ],
+            ]
+        );
     }
 }
