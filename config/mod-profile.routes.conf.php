@@ -122,7 +122,22 @@ return [
                 ],
                 'routes' => [
 
-                    ## GET /profile/#user_id/profile.jpg
+                    ## GET /profile/{{user}}/full
+                    #- user basic profile
+                    'retrieve' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/full',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/GetFullProfileAction',
+                            ],
+                        ],
+                    ],
+
+                    ## GET /profile/{{user}}/profile.jpg
                     #- Retrieve Avatar Profile Picture(s)
                     'profile_pic' => [
                         'route'   => 'RouteMethodSegment',
@@ -147,7 +162,7 @@ return [
                         'routes' =>
                             [
 
-                                ## GET /profile/#user_id/avatars/
+                                ## GET /profile/{{user}}/avatars/
                                 #- Retrieve Avatar Profile Picture(s)
                                 'retrieve' => [
                                     'route'   => 'RouteMethodSegment',

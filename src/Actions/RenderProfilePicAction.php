@@ -18,8 +18,6 @@ class RenderProfilePicAction
 {
     /** @var iRepoAvatars */
     protected $repoAvatars;
-    /** @var iRepoUsers */
-    protected $repoUsers;
 
 
     /**
@@ -27,14 +25,12 @@ class RenderProfilePicAction
      *
      * @param iHttpRequest $httpRequest @IoC /HttpRequest
      * @param iRepoAvatars $repoAvatars @IoC /module/profile/services/repository/Avatars
-     * @param iRepoUsers   $users       @IoC /module/oauth2/services/repository/Users
      */
-    function __construct(iHttpRequest $httpRequest, iRepoAvatars $repoAvatars, iRepoUsers $users)
+    function __construct(iHttpRequest $httpRequest, iRepoAvatars $repoAvatars)
     {
         parent::__construct($httpRequest);
 
         $this->repoAvatars = $repoAvatars;
-        $this->repoUsers   = $users;
     }
 
 
@@ -51,17 +47,12 @@ class RenderProfilePicAction
     function __invoke($token = null, $username = null, $userid = null)
     {
         if ($username !== null) {
-            // Retrieve User ID From OAuth
-            // TODO from service as a client
-            /** @var iOAuthUser $userEntity */
-            $userEntity = $this->repoUsers->findOneMatchByIdentifiers([
-                IdentifierObject::newUsernameIdentifier($username)
-            ]);
+            $userid = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
+                $info = \Module\OAuth2Client\Services::OAuthFederate()
+                    ->getAccountInfoByUsername($username);
 
-            if (! $userEntity )
-                throw new exRouteNotMatch;
-
-            $userid = $userEntity->getUid();
+                return $info['user']['uid'];
+            });
         }
 
 

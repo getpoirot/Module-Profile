@@ -24,4 +24,13 @@ interface iRepoProfiles
      * @return iEntityProfile
      */
     function save(iEntityProfile $profileEntity);
+
+    /**
+     * Find Entity By Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return iEntityProfile|null
+     */
+    function findOneByUID($uid);
 }

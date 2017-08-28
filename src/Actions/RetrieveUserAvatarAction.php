@@ -2,11 +2,7 @@
 namespace Module\Profile\Actions;
 
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Module\OAuth2\Interfaces\Model\iOAuthUser;
-use Module\OAuth2\Interfaces\Model\Repo\iRepoUsers;
-use Module\OAuth2\Model\Entity\User\IdentifierObject;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
-use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -21,8 +17,6 @@ class RetrieveUserAvatarAction
 
     /** @var iRepoAvatars */
     protected $repoAvatars;
-    /** @var iRepoUsers */
-    protected $repoUsers;
 
 
     /**
@@ -30,14 +24,12 @@ class RetrieveUserAvatarAction
      *
      * @param iHttpRequest $httpRequest @IoC /HttpRequest
      * @param iRepoAvatars $repoAvatars @IoC /module/profile/services/repository/Avatars
-     * @param iRepoUsers   $users       @IoC /module/oauth2/services/repository/Users
      */
-    function __construct(iHttpRequest $httpRequest, iRepoAvatars $repoAvatars, iRepoUsers $users)
+    function __construct(iHttpRequest $httpRequest, iRepoAvatars $repoAvatars)
     {
         parent::__construct($httpRequest);
 
         $this->repoAvatars = $repoAvatars;
-        $this->repoUsers   = $users;
     }
 
 
@@ -59,16 +51,12 @@ class RetrieveUserAvatarAction
 
         if ($username !== null) {
             // Retrieve User ID From OAuth
-            // TODO from service as a client
-            /** @var iOAuthUser $userEntity */
-            $userEntity = $this->repoUsers->findOneMatchByIdentifiers([
-                IdentifierObject::newUsernameIdentifier($username)
-            ]);
+            $userid = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
+                $info = \Module\OAuth2Client\Services::OAuthFederate()
+                    ->getAccountInfoByUsername($username);
 
-            if (! $userEntity )
-                throw new exRouteNotMatch;
-
-            $userid = $userEntity->getUid();
+                return $info['user']['uid'];
+            });
         }
 
 

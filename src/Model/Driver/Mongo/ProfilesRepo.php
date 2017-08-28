@@ -92,4 +92,37 @@ class ProfilesRepo
 
         return $rEntity;
     }
+
+    /**
+     * Find Entity By Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return iEntityProfile|null
+     */
+    function findOneByUID($uid)
+    {
+        /** @var Mongo\EntityProfile $entity */
+        $entity = $this->_query()->findOne([
+            'uid' => $this->attainNextIdentifier( $uid ),
+        ]);
+
+
+        if (! $entity )
+            // Not Found ...
+            return null;
+
+        $rEntity = new EntityProfile;
+        $rEntity
+            ->setUid( $entity->getUid() )
+            ->setDisplayName( $entity->getDisplayName() )
+            ->setBio( $entity->getBio() )
+            ->setLocation( $entity->getLocation() )
+            ->setGender( $entity->getGender() )
+            ->setBirthday( $entity->getBirthday() )
+            ->setDateTimeCreated( $entity->getDateTimeCreated() )
+        ;
+
+        return $rEntity;
+    }
 }

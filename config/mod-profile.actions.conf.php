@@ -7,5 +7,7 @@ return [
         'RetrieveAvatarAction'     => \Module\Profile\Actions\RetrieveAvatarAction::class,
         'RetrieveUserAvatarAction' => \Module\Profile\Actions\RetrieveUserAvatarAction::class,
         'RenderProfilePicAction'   => \Module\Profile\Actions\RenderProfilePicAction::class,
+        'GetBasicProfileAction'    => \Module\Profile\Actions\GetBasicProfileAction::class,
+        'GetFullProfileAction'     => \Module\Profile\Actions\GetFullProfileAction::class,
     ],
 ];
