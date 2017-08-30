@@ -112,6 +112,39 @@ return [
                 ],
             ],
 
+            ## GET /profile
+            #- retrieve user profile data
+            'get' => [
+                'route'   => 'RouteMethodSegment',
+                'options' => [
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/',
+                    'method'   => 'GET',
+                    'match_whole' => true,
+                ],
+                'params'  => [
+                    ListenerDispatch::ACTIONS => [
+                        '/module/profile/actions/GetMyProfileAction',
+                    ],
+                ],
+            ],
+
+            ## GET /profile/follows/requests
+            #- list follows requests
+            'followRequests' => [
+                'route'   => 'RouteSegment',
+                'options' => [
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/follows/requests',
+                    'match_whole' => true,
+                ],
+                'params'  => [
+                    ListenerDispatch::ACTIONS => [
+                        '/module/profile/actions/ListFollowRequestsAction',
+                    ],
+                ],
+            ],
+
             'delegate' => [
                 'route' => 'RouteSegment',
                 'options' => [
@@ -124,7 +157,7 @@ return [
 
                     ## GET /profile/{{user}}/full
                     #- user basic profile
-                    'retrieve' => [
+                    'profile_full' => [
                         'route'   => 'RouteSegment',
                         'options' => [
                             'criteria'    => '/full',
@@ -133,6 +166,21 @@ return [
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
                                 '/module/profile/actions/GetFullProfileAction',
+                            ],
+                        ],
+                    ],
+
+                    ## GET /profile/{{user}}/basic
+                    #- user basic profile
+                    'profile_basic' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/basic',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/GetBasicProfileAction',
                             ],
                         ],
                     ],
@@ -180,6 +228,34 @@ return [
 
                             ], // end avatars routes
                     ], // end avatars
+
+                    'interaction' => [
+                        'route' => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/interact',
+                            'match_whole' => false,
+                        ],
+                        'routes' =>
+                            [
+
+                                ## GET /profile/{{user}}/interact/follow
+                                #- Retrieve Avatar Profile Picture(s)
+                                'retrieve' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/follow',
+                                        'method'      => 'GET',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/SendFollowRequestAction',
+                                        ],
+                                    ],
+                                ],
+
+                            ], // end interaction routes
+                    ], // end interaction
 
                 ], // end avatars delegate routes
             ], // end avatars delegate

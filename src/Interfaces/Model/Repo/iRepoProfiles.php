@@ -33,4 +33,22 @@ interface iRepoProfiles
      * @return iEntityProfile|null
      */
     function findOneByUID($uid);
+
+    /**
+     * Find All Users Match By Given UIDs
+     *
+     * @param array $uids
+     *
+     * @return iEntityProfile[]
+     */
+    function findAllByUIDs(array $uids);
+
+    /**
+     * Retrieve User Privacy Stat By Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return string|null
+     */
+    function getUserPrivacyStatByUid($uid);
 }

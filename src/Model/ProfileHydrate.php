@@ -120,6 +120,16 @@ class ProfileHydrate
     }
 
     /**
+     * Get Privacy Status
+     *
+     * @return string
+     */
+    function getPrivacyStatus()
+    {
+        // Has No Implementation
+    }
+
+    /**
      * Get Birthday
      *
      * @return \DateTime|null

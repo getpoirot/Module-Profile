@@ -8,6 +8,7 @@ use Module\MongoDriver\Model\Repository\aRepository;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityProfile;
 use MongoDB\BSON\ObjectID;
+use MongoDB\Driver\ReadPreference;
 use MongoDB\Operation\FindOneAndUpdate;
 
 
@@ -57,14 +58,16 @@ class ProfilesRepo
     function save(iEntityProfile $profileEntity)
     {
         $entity = new Mongo\EntityProfile();
-        $entity->setUid( $this->attainNextIdentifier($profileEntity->getUid()) );
-        $entity->setDisplayName( $profileEntity->getDisplayName() );
-        $entity->setBio( $profileEntity->getBio() );
-        $entity->setLocation( $profileEntity->getLocation() );
-        $entity->setGender( $profileEntity->getGender() );
-        $entity->setBirthday( $profileEntity->getBirthday() );
-        $entity->setDateTimeCreated( $profileEntity->getDateTimeCreated() );
-
+        $entity
+            ->setUid( $this->attainNextIdentifier($profileEntity->getUid()) )
+            ->setDisplayName( $profileEntity->getDisplayName() )
+            ->setBio( $profileEntity->getBio() )
+            ->setLocation( $profileEntity->getLocation() )
+            ->setGender( $profileEntity->getGender() )
+            ->setPrivacyStatus( $profileEntity->getPrivacyStatus() )
+            ->setBirthday( $profileEntity->getBirthday() )
+            ->setDateTimeCreated( $profileEntity->getDateTimeCreated() )
+        ;
 
 
         /** @var \Module\Profile\Model\Driver\Mongo\EntityProfile $entity */
@@ -86,6 +89,7 @@ class ProfilesRepo
             ->setBio( $entity->getBio() )
             ->setLocation( $entity->getLocation() )
             ->setGender( $entity->getGender() )
+            ->setPrivacyStatus( $entity->getPrivacyStatus() )
             ->setBirthday( $entity->getBirthday() )
             ->setDateTimeCreated( $entity->getDateTimeCreated() )
         ;
@@ -119,10 +123,60 @@ class ProfilesRepo
             ->setBio( $entity->getBio() )
             ->setLocation( $entity->getLocation() )
             ->setGender( $entity->getGender() )
+            ->setPrivacyStatus( $entity->getPrivacyStatus() )
             ->setBirthday( $entity->getBirthday() )
             ->setDateTimeCreated( $entity->getDateTimeCreated() )
         ;
 
         return $rEntity;
+    }
+
+    /**
+     * Find All Users Match By Given UIDs
+     *
+     * @param array $uids
+     *
+     * @return iEntityProfile[]
+     */
+    function findAllByUIDs(array $uids)
+    {
+        $uids = array_values($uids);
+
+        foreach ($uids as $i => $v )
+            $uids[$i] = $this->attainNextIdentifier($v);
+
+        /** @var iEntityProfile $r */
+        $crsr = $this->_query()->find([
+            'uid' => [
+                '$in' => $uids,
+            ],
+        ]);
+
+
+        return $crsr;
+    }
+
+    /**
+     * Retrieve User Privacy Stat By Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return string|null
+     */
+    function getUserPrivacyStatByUid($uid)
+    {
+        $e = $this->_query()->findOne(
+            [
+                'uid' => $this->attainNextIdentifier($uid)
+            ]
+            , [
+                'projection' => [
+                    'privacy_status' => 1,
+                ],
+                'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
+            ]
+        );
+
+        return $e;
     }
 }

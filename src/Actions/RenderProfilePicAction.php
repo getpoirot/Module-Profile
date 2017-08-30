@@ -2,11 +2,7 @@
 namespace Module\Profile\Actions;
 
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Module\OAuth2\Interfaces\Model\iOAuthUser;
-use Module\OAuth2\Interfaces\Model\Repo\iRepoUsers;
-use Module\OAuth2\Model\Entity\User\IdentifierObject;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
-use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Header\FactoryHttpHeader;
 use Poirot\Http\HttpResponse;
 use Poirot\Http\Interfaces\iHttpRequest;
@@ -77,9 +73,12 @@ class RenderProfilePicAction
         #
         $response = new HttpResponse;
         $response->setStatusCode(301); // permanently moved
-        $response->headers()->insert(FactoryHttpHeader::of([
-            'Location' => $link,
-        ]));
+        $response->headers()
+            ->insert(FactoryHttpHeader::of(['Location' => $link, ]))
+            ->insert(FactoryHttpHeader::of(['Cache-Control' => 'no-cache, no-store, must-revalidate',]))
+            ->insert(FactoryHttpHeader::of(['Pragma' => 'no-cache',]))
+            ->insert(FactoryHttpHeader::of(['Expires' => '0',]))
+        ;
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $response

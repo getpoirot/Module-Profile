@@ -9,10 +9,10 @@ use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
-class GetBasicProfileAction
+class GetMyProfileAction
     extends aAction
 {
-    protected $tokenMustHaveOwner  = false;
+    protected $tokenMustHaveOwner  = true;
     protected $tokenMustHaveScopes = [
 
     ];
@@ -39,38 +39,26 @@ class GetBasicProfileAction
      * Delete Avatar By Owner
      *
      * @param iAccessToken $token
-     * @param string       $username Uri param
-     * @param string       $userid   Uri param
      *
      * @return array
      * @throws \Exception
      */
-    function __invoke($token = null, $username = null, $userid = null)
+    function __invoke($token = null)
     {
         # Assert Token
         #
         $this->assertTokenByOwnerAndScope($token);
 
-        if ($username !== null) {
-            // Retrieve User Info From OAuth By username
-            $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($username) {
-                $info = \Module\OAuth2Client\Services::OAuthFederate()
-                    ->getAccountInfoByUsername($username);
 
-                return $info;
-            });
+        $userid = $token->getOwnerIdentifier();
 
-            $userid = $oauthInfo['user']['uid'];
+        // Retrieve User ID From OAuth
+        $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($userid) {
+            $info = \Module\OAuth2Client\Services::OAuthFederate()
+                ->getAccountInfoByUid($userid);
 
-        } else {
-            // Retrieve User ID From OAuth
-            $oauthInfo = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($userid) {
-                $info = \Module\OAuth2Client\Services::OAuthFederate()
-                    ->getAccountInfoByUid($userid);
-
-                return $info;
-            });
-        }
+            return $info;
+        });
 
 
         # Retrieve Avatars For User
@@ -84,13 +72,31 @@ class GetBasicProfileAction
             'uid'      => $oauthInfo['user']['uid'],
             'fullname' => ($entity && $entity->getDisplayName()) ? $entity->getDisplayName() : $oauthInfo['user']['fullname'],
             'username' => $oauthInfo['user']['username'],
+            'mobile'   => $oauthInfo['user']['mobile'],
             'avatar'   => (string) \Module\HttpFoundation\Actions::url(
                 'main/profile/delegate/profile_pic'
                 , [ 'userid' => $oauthInfo['user']['uid'] ]
                 , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
             ),
+            'personal' => ($entity) ? [
+                'bio'      => (string) $entity->getBio(),
+                'gender'   => (string) $entity->getGender(),
+                'location'   => ($entity->getLocation()) ? [
+                    'caption' => $entity->getLocation()->getCaption(),
+                    'geo'     => [
+                        'lon' => $entity->getLocation()->getGeo('lon'),
+                        'lat' => $entity->getLocation()->getGeo('lat'),
+                    ],
+                ] : null, // TODO With privacy interaction
+                'birthday' => [ // TODO with privacy interaction
+                    'datetime'  => $entity->getBirthday(),
+                    'timestamp' => $entity->getBirthday()->getTimestamp(),
+                ],
+            ] : null,
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
-                ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC
+                ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
+            'is_valid' => $oauthInfo['is_valid'],
+            'is_valid_more' => $oauthInfo['is_valid_more'],
         ];
 
         return [

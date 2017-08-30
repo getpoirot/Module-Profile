@@ -42,6 +42,13 @@ interface iEntityProfile
     function getGender();
 
     /**
+     * Get Privacy Status
+     *
+     * @return string
+     */
+    function getPrivacyStatus();
+
+    /**
      * Get Birthday
      *
      * @return \DateTime|null

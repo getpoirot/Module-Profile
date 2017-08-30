@@ -10,8 +10,13 @@ class EntityProfile
     extends aDataOptions
     implements iEntityProfile
 {
-    const GENDER_MALE   = 'male';
-    const GENDER_FEMALE = 'female';
+    const GENDER_MALE     = 'male';
+    const GENDER_FEMALE   = 'female';
+
+    const PRIVACY_PRIVATE = 'private';
+    const PRIVACY_PUBLIC  = 'public';
+    const PRIVACY_FRIENDS = 'friends';
+    const PRIVACY_FOFS    = 'fofs';   // friend of friends
 
 
     protected $uid;
@@ -21,6 +26,7 @@ class EntityProfile
     protected $location;
     /** @var string */
     protected $gender;
+    protected $privacyStatus = self::PRIVACY_PUBLIC;
     /** @var \DateTime */
     protected $birthday;
     /** @var \DateTime */
@@ -150,6 +156,29 @@ class EntityProfile
     }
 
     /**
+     * Get Privacy Status
+     *
+     * @return string
+     */
+    function getPrivacyStatus()
+    {
+        return $this->privacyStatus;
+    }
+
+    /**
+     * Set Privacy Status
+     *
+     * @param string $privacyStatus
+     *
+     * @return $this
+     */
+    function setPrivacyStatus($privacyStatus)
+    {
+        $this->privacyStatus = (string) $privacyStatus;
+        return $this;
+    }
+
+    /**
      * Set Birthday
      *
      * @param \DateTime|null $dateTime
@@ -178,6 +207,7 @@ class EntityProfile
     {
         return $this->birthday;
     }
+
 
     /**
      * Set Created Timestamp
