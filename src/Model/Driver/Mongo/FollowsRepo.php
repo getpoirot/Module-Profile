@@ -62,7 +62,7 @@ class FollowsRepo
             ->setOutgoing( $this->attainNextIdentifier($entity->getOutgoing()) )
             ->setStat( $entity->getStat() )
             ->setDateTimeCreated( $entity->getDateTimeCreated() )
-            ->setDateTimeUpdated( $entity->getDateTimeUpdated() )
+            ->setDateTimeUpdated( new \DateTime )
         ;
 
         $entity = $this->_query()->findOneAndUpdate(
@@ -76,6 +76,37 @@ class FollowsRepo
             , [ 'upsert' => true, 'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER, ]
         );
 
+
+        $rEntity = new EntityFollow;
+        $rEntity
+            ->setIncoming( $entity->getIncoming() )
+            ->setOutgoing( $entity->getOutgoing() )
+            ->setStat( $entity->getStat() )
+            ->setDateTimeCreated( $entity->getDateTimeCreated() )
+            ->setDateTimeUpdated( $entity->getDateTimeUpdated() )
+        ;
+
+        return $rEntity;
+    }
+
+    /**
+     * Find an Entity With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return EntityFollow|null
+     */
+    function findOneByUID($uid)
+    {
+        $entity = $this->_query()->findOne(
+            [
+                '_id' => $this->attainNextIdentifier( $uid ),
+            ]
+        );
+
+
+        if (! $entity )
+            return null;
 
         $rEntity = new EntityFollow;
         $rEntity
@@ -134,6 +165,36 @@ class FollowsRepo
     {
         $condition = [
             'incoming' => $this->attainNextIdentifier($incoming)
+        ];
+
+        if ($status) {
+            $or = [];
+            foreach ($status as $s)
+                $or[] = [ 'stat' =>  $s ];
+
+            $condition += [ '$or' => $or ];
+        }
+
+
+        $crsr = $this->_query()->find($condition, [
+            'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
+        ]);
+
+        return $crsr;
+    }
+
+    /**
+     * Find All Follow Requests Match Outgoing UID
+     *
+     * @param mixed $incoming
+     * @param array $status   If given filter for these specific status
+     *
+     * @return \Traversable
+     */
+    function findAllForOutgoings($incoming, array $status = null)
+    {
+        $condition = [
+            'outgoing' => $this->attainNextIdentifier($incoming)
         ];
 
         if ($status) {

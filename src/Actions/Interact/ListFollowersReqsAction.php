@@ -4,19 +4,16 @@ namespace Module\Profile\Actions\Interact;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Actions\aAction;
 use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
-use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
-class ListFollowRequestsAction
+class ListFollowersReqsAction
     extends aAction
 {
     /** @var iRepoFollows */
     protected $repoFollows;
-    /** @var iRepoProfiles */
-    protected $repoProfiles;
 
 
     /**
@@ -24,14 +21,12 @@ class ListFollowRequestsAction
      *
      * @param iHttpRequest  $httpRequest  @IoC /HttpRequest
      * @param iRepoFollows  $repoFollows  @IoC /module/profile/services/repository/Follows
-     * @param iRepoProfiles $repoProfiles @IoC /module/profile/services/repository/Profiles
      */
-    function __construct(iHttpRequest $httpRequest, iRepoFollows $repoFollows, iRepoProfiles $repoProfiles)
+    function __construct(iHttpRequest $httpRequest, iRepoFollows $repoFollows)
     {
         parent::__construct($httpRequest);
 
         $this->repoFollows  = $repoFollows;
-        $this->repoProfiles = $repoProfiles;
     }
 
 
@@ -56,7 +51,7 @@ class ListFollowRequestsAction
         $followRequests = $this->repoFollows->findAllForIncoming(
             $token->getOwnerIdentifier()
             , [
-                'pending'
+                EntityFollow::STAT_PENDING
             ]
         );
 
@@ -86,12 +81,13 @@ class ListFollowRequestsAction
             $c++;
         }
 
-
         # Retrieve Users Account Info
         #
-        $profiles = $this->ListUsersProfile(array_keys($r));
-        foreach ($profiles as $uid => $user)
-            $r[$uid]['user'] = $user;
+        if (! empty($r) ) {
+            $profiles = $this->ListUsersProfile(array_keys($r));
+            foreach ($profiles as $uid => $user)
+                $r[$uid]['user'] = $user;
+        }
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [

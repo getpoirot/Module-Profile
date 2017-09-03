@@ -28,6 +28,15 @@ interface iRepoFollows
     function save(EntityFollow $entity);
 
     /**
+     * Find an Entity With Given UID
+     *
+     * @param mixed $uid
+     *
+     * @return EntityFollow|null
+     */
+    function findOneByUID($uid);
+
+    /**
      * Find One Interaction Between Receiver Of Request And Requester
      *
      * @param mixed $incoming
@@ -47,5 +56,13 @@ interface iRepoFollows
      */
     function findAllForIncoming($incoming, array $status = null);
 
-
+    /**
+     * Find All Follow Requests Match Outgoing UID
+     *
+     * @param mixed $incoming
+     * @param array $status   If given filter for these specific status
+     *
+     * @return \Traversable
+     */
+    function findAllForOutgoings($incoming, array $status = null);
 }

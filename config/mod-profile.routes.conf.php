@@ -129,18 +129,155 @@ return [
                 ],
             ],
 
-            ## GET /profile/follows/requests
-            #- list follows requests
-            'followRequests' => [
-                'route'   => 'RouteSegment',
+            ## GET /profile/followers
+            'followers' => [
+                'route'   => 'RouteMethodSegment',
                 'options' => [
                     // 24 is length of content_id by persistence
-                    'criteria' => '/follows/requests',
+                    'criteria' => '/followers',
+                    'method'   => 'GET',
                     'match_whole' => true,
                 ],
                 'params'  => [
                     ListenerDispatch::ACTIONS => [
-                        '/module/profile/actions/ListFollowRequestsAction',
+                        '/module/profile/actions/GetMyFollowersAction',
+                    ],
+                ],
+            ],
+
+            ## GET /profile/followers/requests
+            #- list follows requests
+            'followersRequests' => [
+                'route'   => 'RouteSegment',
+                'options' => [
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/followers/requests',
+                    'match_whole' => false,
+                ],
+
+                'routes' => [
+
+                    ## GET /profile/follows/requests
+                    #- Retrieve Avatar Profile Picture(s)
+                    'listRequests' => [
+                        'route'   => 'RouteMethodSegment',
+                        'options' => [
+                            'criteria'    => '/',
+                            'method'      => 'GET',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/ListFollowersReqsAction',
+                            ],
+                        ],
+                    ],
+
+                    'delegate' => [
+                        'route' => 'RouteSegment',
+                        'options' => [
+                            // 24 is length of user_id by persistence
+                            'criteria'    => '/<:request_id~\w{24}~>',
+                            'match_whole' => false,
+                        ],
+                        'routes' => [
+                            'accept' => [
+                                'route'   => 'RouteMethodSegment',
+                                'options' => [
+                                    'criteria'    => '/',
+                                    'method'      => 'POST',
+                                    'match_whole' => true,
+                                ],
+                                'params'  => [
+                                    ListenerDispatch::ACTIONS => [
+                                        '/module/profile/actions/AcceptRequestAction',
+                                    ],
+                                ],
+                            ],
+                            'deny' => [
+                                'route'   => 'RouteMethodSegment',
+                                'options' => [
+                                    'criteria'    => '/',
+                                    'method'      => 'DELETE',
+                                    'match_whole' => true,
+                                ],
+                                'params'  => [
+                                    ListenerDispatch::ACTIONS => [
+                                        '/module/profile/actions/DenyFollowRequestAction',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
+            ## GET /profile/followings
+            'followings' => [
+                'route'   => 'RouteMethodSegment',
+                'options' => [
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/followings',
+                    'method'   => 'GET',
+                    'match_whole' => true,
+                ],
+                'params'  => [
+                    ListenerDispatch::ACTIONS => [
+                        '/module/profile/actions/GetMyFollowingsAction',
+                    ],
+                ],
+            ],
+
+            ## GET /profile/following/requests
+            #- list follows requests
+            'followingRequests' => [
+                'route'   => 'RouteSegment',
+                'options' => [
+                    // 24 is length of content_id by persistence
+                    'criteria' => '/followings/requests',
+                    'match_whole' => false,
+                ],
+
+                'routes' => [
+
+                    ## GET /profile/follows/requests
+                    #- Retrieve Avatar Profile Picture(s)
+                    'listRequests' => [
+                        'route'   => 'RouteMethodSegment',
+                        'options' => [
+                            'criteria'    => '/',
+                            'method'      => 'GET',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/ListFollowingsReqsAction',
+                            ],
+                        ],
+                    ],
+
+                    'delegate' => [
+                        'route' => 'RouteSegment',
+                        'options' => [
+                            // 24 is length of user_id by persistence
+                            'criteria'    => '/<:request_id~\w{24}~>',
+                            'match_whole' => false,
+                        ],
+                        'routes' => [
+                            'cancel' => [
+                                'route'   => 'RouteMethodSegment',
+                                'options' => [
+                                    'criteria'    => '/',
+                                    'method'      => 'DELETE',
+                                    'match_whole' => true,
+                                ],
+                                'params'  => [
+                                    ListenerDispatch::ACTIONS => [
+                                        '/module/profile/actions/CancelFollowingReqAction',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -181,6 +318,36 @@ return [
                         'params'  => [
                             ListenerDispatch::ACTIONS => [
                                 '/module/profile/actions/GetBasicProfileAction',
+                            ],
+                        ],
+                    ],
+
+                    ## GET /profile/{{user}}/followers
+                    #- user basic profile
+                    'followers' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/followers',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/GetUserFollowersAction',
+                            ],
+                        ],
+                    ],
+
+                    ## GET /profile/{{user}}/followings
+                    #- user basic profile
+                    'followings' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/followings',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/GetUserFollowingsAction',
                             ],
                         ],
                     ],
@@ -232,15 +399,14 @@ return [
                     'interaction' => [
                         'route' => 'RouteSegment',
                         'options' => [
-                            'criteria'    => '/interact',
+                            'criteria'    => '/go',
                             'match_whole' => false,
                         ],
                         'routes' =>
                             [
 
-                                ## GET /profile/{{user}}/interact/follow
-                                #- Retrieve Avatar Profile Picture(s)
-                                'retrieve' => [
+                                ## GET /profile/{{user}}/go/follow
+                                'follow' => [
                                     'route'   => 'RouteMethodSegment',
                                     'options' => [
                                         'criteria'    => '/follow',
@@ -250,6 +416,36 @@ return [
                                     'params'  => [
                                         ListenerDispatch::ACTIONS => [
                                             '/module/profile/actions/SendFollowRequestAction',
+                                        ],
+                                    ],
+                                ],
+
+                                ## GET /profile/{{user}}/go/remove
+                                'remove' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/remove',
+                                        'method'      => 'GET',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/RemoveFromFriendsAction',
+                                        ],
+                                    ],
+                                ],
+
+                                ## GET /profile/{{user}}/go/kick
+                                'kick' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/kick',
+                                        'method'      => 'GET',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/KickUserAction',
                                         ],
                                     ],
                                 ],
