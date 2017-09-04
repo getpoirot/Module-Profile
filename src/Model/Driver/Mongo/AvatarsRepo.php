@@ -55,7 +55,7 @@ class AvatarsRepo
      *
      * @return EntityAvatar|null
      */
-    function findOneByUid($uid)
+    function findOneByOwnerUid($uid)
     {
         $entity = $this->_query()->findOne([
             'uid' => $this->attainNextIdentifier( $uid ),
@@ -107,7 +107,7 @@ class AvatarsRepo
                     'uid'     => $this->attainNextIdentifier( $entity->getUid() ),
                     'primary' => $entity->getPrimary(),
                 ],
-                '$push' => [
+                '$addToSet' => [
                     'medias' => [
                         '$each'     => $medias,
                         '$position' => 0,

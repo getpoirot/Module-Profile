@@ -70,8 +70,12 @@ class UploadAvatarAction
 
             $binArr = $r['bindata'];
 
-            $entity = new EntityAvatar;
-            $entity->setUid( $token->getOwnerIdentifier() );
+            $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
+            if (! $entity ) {
+                $entity = new EntityAvatar;
+                $entity->setUid( $token->getOwnerIdentifier() );
+            }
+
             if ($avatar->getAsPrimary())
                 $entity->setPrimary( $binArr['hash'] );
 
