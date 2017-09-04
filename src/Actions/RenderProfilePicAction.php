@@ -54,7 +54,7 @@ class RenderProfilePicAction
 
         # Retrieve Avatars For User
         #
-        $entity = $this->repoAvatars->findOneByUid( $userid );
+        $entity = $this->repoAvatars->findOneByOwnerUid( $userid );
         $r      = \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($entity);
 
 

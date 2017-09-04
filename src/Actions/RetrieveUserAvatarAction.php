@@ -62,7 +62,7 @@ class RetrieveUserAvatarAction
 
         # Retrieve Avatars For User
         #
-        $entity = $this->repoAvatars->findOneByUid( $userid );
+        $entity = $this->repoAvatars->findOneByOwnerUid( $userid );
 
 
         # Build Response

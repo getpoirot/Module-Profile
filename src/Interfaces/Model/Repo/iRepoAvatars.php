@@ -24,7 +24,7 @@ interface iRepoAvatars
      *
      * @return EntityAvatar|null
      */
-    function findOneByUid($uid);
+    function findOneByOwnerUid($uid);
 
     /**
      * Save Entity By Insert Or Update
