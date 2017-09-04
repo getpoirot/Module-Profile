@@ -89,6 +89,21 @@ return [
                                     ],
                                 ],
 
+                                ## PUT /profile/avatars/
+                                'modify' => [
+                                    'route'   => 'RouteMethodSegment',
+                                    'options' => [
+                                        'criteria'    => '/',
+                                        'method'      => 'PUT',
+                                        'match_whole' => true,
+                                    ],
+                                    'params'  => [
+                                        ListenerDispatch::ACTIONS => [
+                                            '/module/profile/actions/ModifyAvatarAction',
+                                        ],
+                                    ],
+                                ],
+
                             ], // end avatars delegate routes
                         ], // end avatars delegate
 
