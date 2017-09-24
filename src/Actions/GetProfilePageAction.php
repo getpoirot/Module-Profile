@@ -88,11 +88,6 @@ class GetProfilePageAction
         # Retrieve Avatars For User
         #
         $entity = $this->repoProfiles->findOneByUID( $userid );
-        if (! $entity )
-            throw new exRouteNotMatch(sprintf(
-                'User %s not exists.'
-                , $userid
-            ));
 
 
         # Find Relation Between Users
@@ -153,8 +148,8 @@ class GetProfilePageAction
             'posts_count'      => $cntPosts,
             'score' => 0, // TODO
             'profile' => [
-                'bio'      => (string) $entity->getBio(),
-                'gender'   => (string) $entity->getGender(),
+                'bio'      => ($entity) ? (string) $entity->getBio() : null,
+                'gender'   => ($entity) ? (string) $entity->getGender() : null,
                 'personal' => ($entity) ? [
                     'location'   => ($entity->getLocation()) ? [
                         'caption' => $entity->getLocation()->getCaption(),
