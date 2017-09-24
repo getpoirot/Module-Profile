@@ -4,6 +4,7 @@ return [
         'RegisterAction'            => \Module\Profile\Actions\RegisterAction::class,
         'GetBasicProfileAction'     => \Module\Profile\Actions\GetBasicProfileAction::class,
         'GetFullProfileAction'      => \Module\Profile\Actions\GetFullProfileAction::class,
+        'GetProfilePageAction'      => \Module\Profile\Actions\GetProfilePageAction::class,
         'GetMyProfileAction'        => \Module\Profile\Actions\GetMyProfileAction::class,
 
         'UploadAvatarAction'        => \Module\Profile\Actions\UploadAvatarAction::class,

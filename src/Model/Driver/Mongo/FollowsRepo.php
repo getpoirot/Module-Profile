@@ -184,17 +184,47 @@ class FollowsRepo
     }
 
     /**
+     * Get Count All Incoming Request For
+     *
+     * @param $incoming
+     * @param array|null $status
+     *
+     * @return int
+     */
+    function getCountAllForIncoming($incoming, array $status = null)
+    {
+        $condition = [
+            'incoming' => $this->attainNextIdentifier($incoming)
+        ];
+
+        if ($status) {
+            $or = [];
+            foreach ($status as $s)
+                $or[] = [ 'stat' =>  $s ];
+
+            $condition += [ '$or' => $or ];
+        }
+
+
+        $crsr = $this->_query()->count($condition, [
+            'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
+        ]);
+
+        return $crsr;
+    }
+
+    /**
      * Find All Follow Requests Match Outgoing UID
      *
-     * @param mixed $incoming
+     * @param mixed $outgoing
      * @param array $status   If given filter for these specific status
      *
      * @return \Traversable
      */
-    function findAllForOutgoings($incoming, array $status = null)
+    function findAllForOutgoings($outgoing, array $status = null)
     {
         $condition = [
-            'outgoing' => $this->attainNextIdentifier($incoming)
+            'outgoing' => $this->attainNextIdentifier($outgoing)
         ];
 
         if ($status) {
@@ -207,6 +237,36 @@ class FollowsRepo
 
 
         $crsr = $this->_query()->find($condition, [
+            'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
+        ]);
+
+        return $crsr;
+    }
+
+    /**
+     * Get Count All Outgoing Request For
+     *
+     * @param $outgoing
+     * @param array|null $status
+     *
+     * @return int
+     */
+    function getCountAllForOutgoing($outgoing, array $status = null)
+    {
+        $condition = [
+            'outgoing' => $this->attainNextIdentifier($outgoing)
+        ];
+
+        if ($status) {
+            $or = [];
+            foreach ($status as $s)
+                $or[] = [ 'stat' =>  $s ];
+
+            $condition += [ '$or' => $or ];
+        }
+
+
+        $crsr = $this->_query()->count($condition, [
             'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
         ]);
 

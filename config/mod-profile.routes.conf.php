@@ -301,14 +301,28 @@ return [
                 'route' => 'RouteSegment',
                 'options' => [
                     // 24 is length of user_id by persistence
-                    // TODO . in username not matched
-                    'criteria'    => '/<@:username~\w+~><-:userid~\w{24}~>',
+                    'criteria'    => '/<@:username~[a-zA-Z.]+~><-:userid~\w{24}~>',
                     'match_whole' => false,
                 ],
                 'routes' => [
 
+                    ## GET /profile/{{user}}/page
+                    #- user profile page
+                    'profile_page' => [
+                        'route'   => 'RouteSegment',
+                        'options' => [
+                            'criteria'    => '/page',
+                            'match_whole' => true,
+                        ],
+                        'params'  => [
+                            ListenerDispatch::ACTIONS => [
+                                '/module/profile/actions/GetProfilePageAction',
+                            ],
+                        ],
+                    ],
+
                     ## GET /profile/{{user}}/full
-                    #- user basic profile
+                    #- user full profile
                     'profile_full' => [
                         'route'   => 'RouteSegment',
                         'options' => [

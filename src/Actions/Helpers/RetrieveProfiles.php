@@ -4,7 +4,6 @@ namespace Module\Profile\Actions\Helpers;
 use Module\HttpFoundation\Actions\Url;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityProfile;
-use Poirot\Std\Type\StdTravers;
 
 
 class RetrieveProfiles

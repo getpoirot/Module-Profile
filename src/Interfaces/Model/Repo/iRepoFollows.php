@@ -57,12 +57,32 @@ interface iRepoFollows
     function findAllForIncoming($incoming, array $status = null);
 
     /**
+     * Get Count All Incoming Request For
+     *
+     * @param $incoming
+     * @param array|null $status
+     *
+     * @return int
+     */
+    function getCountAllForIncoming($incoming, array $status = null);
+
+    /**
      * Find All Follow Requests Match Outgoing UID
      *
-     * @param mixed $incoming
+     * @param mixed $outgoing
      * @param array $status   If given filter for these specific status
      *
      * @return \Traversable
      */
-    function findAllForOutgoings($incoming, array $status = null);
+    function findAllForOutgoings($outgoing, array $status = null);
+
+    /**
+     * Get Count All Outgoing Request For
+     *
+     * @param $outgoing
+     * @param array|null $status
+     *
+     * @return int
+     */
+    function getCountAllForOutgoing($outgoing, array $status = null);
 }
