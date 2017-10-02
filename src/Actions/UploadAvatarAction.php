@@ -4,7 +4,6 @@ namespace Module\Profile\Actions;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Avatars\FactoryMediaObject;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
-use Module\Profile\Model\Entity\Avatars\aMediaObject;
 use Module\Profile\Model\UploadAvatarHydrate;
 use Module\Profile\Model\Entity\EntityAvatar;
 use Poirot\ApiClient\AccessTokenObject;

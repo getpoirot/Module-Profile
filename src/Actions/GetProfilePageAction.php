@@ -96,7 +96,7 @@ class GetProfilePageAction
 
         if ($visitor == $userid) {
             // You visit Yourself!!
-            $relation = 'self';
+            $relation = null;
         } else {
             // outward
             $outward = 'none';
@@ -115,6 +115,11 @@ class GetProfilePageAction
                 if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
                     $inward = $stat;
             }
+
+            $relation = [
+                'outward' => $outward,
+                'inward'  => $inward,
+            ];
         }
 
 
@@ -139,10 +144,7 @@ class GetProfilePageAction
             ),
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
-            'relation' => (isset($relation)) ? $relation : [
-                'outward' => $outward,
-                'inward'  => $inward,
-            ],
+            'relation' => $relation,
             'followers_count'  => $cntFollowers,
             'followings_count' => $cntFollowings,
             'posts_count'      => $cntPosts,
@@ -164,6 +166,18 @@ class GetProfilePageAction
                     ],
                 ] : null,
             ],
+
+            // TODO from registered events
+            'wallets' => [
+                [
+                    'type' => 'Rate',
+                    'total_amount' => 45
+                ],
+                [
+                    'type' => 'Price',
+                    'total_amount' => 450
+                ]
+            ]
         ];
 
         return [
