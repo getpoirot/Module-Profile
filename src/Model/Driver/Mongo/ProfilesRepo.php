@@ -184,15 +184,15 @@ class ProfilesRepo
      * Find All Entities Match With Given Expression
      *
      * $exp: [
-     *   'owner_id'         => ..,
-     *   'wallet_type' => ..,
-     *   'target'      => ...
+     *   'uid'         => ..,
+     *   'display_name' => ..,
+     *   'privacy_status'      => ...
      * ]
      *
      * @param array $expr
      * @param string $offset
      * @param int $limit
-     * @param integer $sort
+     *  @param string|integer  $sort (if driver is mongo sort define as int else define desc or asc)
      *
      * @return \Traversable
      */
@@ -201,8 +201,6 @@ class ProfilesRepo
     {
         # search term to mongo condition
         $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expr);
-
-
 
         if ($offset)
             $condition = [
