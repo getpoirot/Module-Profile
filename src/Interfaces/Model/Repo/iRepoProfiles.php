@@ -6,6 +6,10 @@ use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
 
 interface iRepoProfiles
 {
+
+    const MONGO_SORT_ASC  = 1;
+    const MONGO_SORT_DESC = -1;
+
     /**
      * Generate next unique identifier to persist
      * data with
@@ -51,4 +55,23 @@ interface iRepoProfiles
      * @return string|null
      */
     function getUserPrivacyStatByUid($uid);
+
+
+    /**
+     * Find All Entities Match With Given Expression
+     *
+     * $exp: [
+     *   'owner_id'         => ..,
+     *   'wallet_type' => ..,
+     *   'target'      => ...
+     * ]
+     *
+     * @param array $expr
+     * @param string $offset
+     * @param int $limit
+     * @param integer $sort
+     *
+     * @return \Traversable
+     */
+    function findAll($expr , $limit , $offset ,$sort);
 }
