@@ -179,4 +179,46 @@ class ProfilesRepo
 
         return $e;
     }
+
+    /**
+     * Find All Entities Match With Given Expression
+     *
+     * $exp: [
+     *   'uid'         => ..,
+     *   'display_name' => ..,
+     *   'privacy_status'      => ...
+     * ]
+     *
+     * @param array $expr
+     * @param string $offset
+     * @param int $limit
+     *  @param string|integer  $sort (if driver is mongo sort define as int else define desc or asc)
+     *
+     * @return \Traversable
+     */
+
+    function findAll($expr, $limit, $offset,$sort = self::MONGO_SORT_DESC)
+    {
+        # search term to mongo condition
+        $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expr);
+
+        if ($offset)
+            $condition = [
+                    'uid' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] + $condition;
+
+        $r = $this->_query()->find(
+            $condition
+            , [
+                'limit' => $limit,
+                'sort'  => [
+                    '_id' => $sort,
+                ]
+            ]
+        );
+
+        return $r;
+    }
 }
