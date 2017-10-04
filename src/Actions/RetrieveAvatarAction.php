@@ -29,7 +29,7 @@ class RetrieveAvatarAction
 
 
     /**
-     * Delete Avatar By Owner
+     * Retrieve avatar
      *
      * @param iAccessToken $token
      *

@@ -221,4 +221,32 @@ class ProfilesRepo
 
         return $r;
     }
+
+    /**
+     * @param $limit
+     * @param $offset
+     * @return \Traversable
+     */
+    function findAllHaveAvatar($limit, $offset)
+    {
+        $condition=[];
+        if ($offset)
+            $condition = [
+                    'uid' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] ;
+
+        $r = $this->_query()->find(
+            $condition
+            , [
+                'limit' => $limit,
+                'sort'  => [
+                    '_id' => -1,
+                ]
+            ]
+        );
+
+        return $r;
+    }
 }

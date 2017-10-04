@@ -73,4 +73,12 @@ interface iRepoProfiles
      * @return \Traversable
      */
     function findAll($expr , $limit , $offset ,$sort);
+
+    /**
+     * @param $limit
+     * @param $offset
+     * @return \Traversable
+     */
+
+    function findAllHaveAvatar($limit ,$offset);
 }

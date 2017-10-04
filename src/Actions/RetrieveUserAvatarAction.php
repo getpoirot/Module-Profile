@@ -34,7 +34,7 @@ class RetrieveUserAvatarAction
 
 
     /**
-     * Delete Avatar By Owner
+     * Retrieve Avatar off user
      *
      * @param iAccessToken $token
      * @param string       $username Uri param
