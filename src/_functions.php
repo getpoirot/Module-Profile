@@ -1,10 +1,7 @@
 <?php
 namespace Module\Profile
 {
-    use Module\Profile\Model\Entity\Avatars\MediaObjectTenderBin;
     use Module\Profile\Model\Entity\EntityProfile;
-    use Poirot\Std\Type\StdArray;
-    use Poirot\Std\Type\StdTravers;
 
 
     /**
@@ -41,39 +38,6 @@ namespace Module\Profile
         ];
     }
 
-
-
-    /**
-     * Embed Retrieval Http Link To MediaObjects
-     *
-     * @param array|\Traversable $content Content include MediaObject
-     *
-     * @return array Prepared content include link(s)
-     */
-    function embedLinkToMediaAvatars($content)
-    {
-        if ($content instanceof \Traversable )
-            $content = StdTravers::of($content)->toArray();
-
-        if (! is_array($content) )
-            return $content;
-
-
-        $content = StdArray::of($content)->withWalk(function(&$val) {
-            if ($val instanceof MediaObjectTenderBin) {
-                $orig         = $val;
-                $val          = StdTravers::of($val)->toArray();
-                $val['_link'] = (string) \Module\Foundation\Actions::Path(
-                    'mod-content-media_cdn' // this name is reserved; @see mod-content.conf.php
-                    , [
-                        'hash' => $orig->getHash()
-                    ]
-                );
-            }
-        });
-
-        return $content->value; // instance access to internal array
-    }
 }
 
 namespace Module\Profile\Avatars
@@ -98,7 +62,7 @@ namespace Module\Profile\Avatars
             $r = [];
 
         } else {
-            $r = \Module\Profile\embedLinkToMediaAvatars( $avatars->getMedias() );
+            $r = \Poirot\TenderBinClient\embedLinkToMediaData( $avatars->getMedias() );
             /** @var aMediaObject $m */
             $p = current($r); // first as primary profile pic
             foreach ($r as $m) {
