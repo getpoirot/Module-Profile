@@ -146,3 +146,16 @@ namespace Module\Profile
         }
     }
 }
+
+namespace Module\Profile
+{
+    use Module\Profile\Actions\Helpers\RetrieveProfiles;
+
+    /**
+     * @see    RetrieveProfiles
+     * @method static array RetrieveProfiles(array $userIds, $mode='basic')
+     * ..........................................
+     */
+    class Actions extends \IOC
+    { }
+}

@@ -1,7 +1,28 @@
 <?php
 use Module\MongoDriver\Services\aServiceRepository;
+use Module\Profile\Events\EventsHeapOfProfile;
 
 return [
+
+    Module\Profile\Module::CONF => [
+
+        ## Events
+        #
+        \Module\Profile\Actions\aAction::CONF => [
+            // Events Section Of Events Builder
+            /** @see \Poirot\Events\Event\BuildEvent */
+
+            EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT => [
+                'listeners' => [
+                    ['priority' => 1000,  'listener' => function($entityProfile, $visitor) {
+                        // Implement this
+                        /** @var \Module\Profile\Model\Entity\EntityProfile $entityProfile */
+                    }],
+                ],
+            ],
+
+        ],
+    ],
 
     # Mongo Driver:
 

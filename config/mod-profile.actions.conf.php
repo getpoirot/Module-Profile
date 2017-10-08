@@ -26,6 +26,6 @@ return [
         'GetUserFollowingsAction'   => \Module\Profile\Actions\Interact\GetUserFollowingsAction::class,
         'RemoveFromFriendsAction'   => \Module\Profile\Actions\Interact\RemoveFromFriendsAction::class,
         'KickUserAction'            => \Module\Profile\Actions\Interact\KickUserAction::class,
-        'ListUsersProfile'          => \Module\Profile\Actions\Helpers\RetrieveProfiles::class,
+        'RetrieveProfiles'          => \Module\Profile\Actions\Helpers\RetrieveProfiles::class,
     ],
 ];

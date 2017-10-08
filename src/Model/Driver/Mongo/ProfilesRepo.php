@@ -223,30 +223,43 @@ class ProfilesRepo
     }
 
     /**
+     * Find All Users Has Avatar Profile
+     *
      * @param $limit
      * @param $offset
+     *
      * @return \Traversable
      */
-    function findAllHaveAvatar($limit, $offset)
+    function findAllHaveAvatar($limit = 30, $offset = null)
     {
-        $condition=[];
+        $condition = [];
+
         if ($offset)
             $condition = [
-                    'uid' => [
-                        '$lt' => $this->attainNextIdentifier($offset),
-                    ]
-                ] ;
+                '_id' => [ '$lt' => $this->attainNextIdentifier($offset), ]
+            ];
 
-        $r = $this->_query()->find(
-            $condition
-            , [
-                'limit' => $limit,
-                'sort'  => [
-                    '_id' => -1,
-                ]
-            ]
-        );
+        $q = [
+            [ '$limit' => $limit ],
+            [ '$sort' => ['_id' => -1], ],
+            [ '$lookup' => [
+                'from'         => 'profile.users.avatars',
+                'localField'   => 'uid',
+                'foreignField' => 'uid',
+                'as'           => 'avatars', ], ],
+            [ '$unwind' => '$avatars'], // Only Users Who Have Avatar
+            [
+                '$project' => [
+                    'uid' => 1,  'display_name' => 1,  'gender' => 1,
+                    'privacy_status' => 1,
+                ],
+            ],
+        ];
 
+        if (! empty($condition) )
+            array_unshift($q, $condition);
+
+        $r = $this->_query()->aggregate($q);
         return $r;
     }
 }

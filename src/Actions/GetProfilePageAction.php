@@ -4,11 +4,11 @@ namespace Module\Profile\Actions;
 use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Actions\Url;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Module\Profile\Events\EventsHeapOfProfile;
 use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityFollow;
 use Module\Profile\Model\Entity\EntityProfile;
-use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -84,6 +84,8 @@ class GetProfilePageAction
             });
         }
 
+        $visitor = $token->getOwnerIdentifier();
+
 
         # Retrieve Avatars For User
         #
@@ -92,8 +94,6 @@ class GetProfilePageAction
 
         # Find Relation Between Users
         #
-        $visitor = $token->getOwnerIdentifier();
-
         if ($visitor == $userid) {
             // You visit Yourself!!
             $relation = null;
@@ -166,19 +166,19 @@ class GetProfilePageAction
                     ],
                 ] : null,
             ],
-
-            // TODO from registered events
-            'wallets' => [
-                [
-                    'type' => 'Rate',
-                    'total_amount' => 45
-                ],
-                [
-                    'type' => 'Price',
-                    'total_amount' => 450
-                ]
-            ]
         ];
+
+        ## Event
+        #
+        $r = $this->event()
+            ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
+                /** @see Content\Events\DataCollector */
+                'result' => $r, 'entity_profile' => $entity, 'visitor' => $visitor,
+            ])
+            ->then(function ($collector) {
+                /** @var \Module\Profile\Events\DataCollector $collector */
+                return $collector->getResult();
+            });
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r

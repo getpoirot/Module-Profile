@@ -75,10 +75,12 @@ interface iRepoProfiles
     function findAll($expr , $limit , $offset ,$sort);
 
     /**
+     * Find All Users Has Avatar Profile
+     *
      * @param $limit
      * @param $offset
+     *
      * @return \Traversable
      */
-
-    function findAllHaveAvatar($limit ,$offset);
+    function findAllHaveAvatar($limit = 30, $offset = null);
 }

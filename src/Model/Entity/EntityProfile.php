@@ -3,11 +3,11 @@ namespace Module\Profile\Model\Entity;
 
 use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
 use Module\Profile\Model\Entity\Profile\GeoObject;
-use Poirot\Std\Struct\aDataOptions;
+use Poirot\Std\Struct\DataOptionsOpen;
 
 
 class EntityProfile
-    extends aDataOptions
+    extends DataOptionsOpen
     implements iEntityProfile
 {
     const GENDER_MALE     = 'male';

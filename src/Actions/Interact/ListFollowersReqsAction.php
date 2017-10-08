@@ -84,7 +84,7 @@ class ListFollowersReqsAction
         # Retrieve Users Account Info
         #
         if (! empty($r) ) {
-            $profiles = $this->ListUsersProfile(array_keys($r));
+            $profiles = $this->RetrieveProfiles(array_keys($r));
             foreach ($profiles as $uid => $user)
                 $r[$uid]['user'] = $user;
         }
