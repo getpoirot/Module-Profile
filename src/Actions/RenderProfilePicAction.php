@@ -57,7 +57,6 @@ class RenderProfilePicAction
         $entity = $this->repoAvatars->findOneByOwnerUid( $userid );
         $r      = \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($entity);
 
-
         # Build Avatar Link
         #
         if ( $r['primary'] )

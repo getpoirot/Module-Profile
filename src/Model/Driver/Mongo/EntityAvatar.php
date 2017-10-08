@@ -2,8 +2,8 @@
 namespace Module\Profile\Model\Driver\Mongo;
 
 use Module\MongoDriver\Model\tPersistable;
-use Module\Profile\Avatars\FactoryMediaObject;
 use MongoDB\BSON\Persistable;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class EntityAvatar

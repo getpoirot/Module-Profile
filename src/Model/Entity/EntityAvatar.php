@@ -1,8 +1,8 @@
 <?php
 namespace Module\Profile\Model\Entity;
 
-use Module\Profile\Model\Entity\Avatars\aMediaObject;
 use Poirot\Std\Struct\aDataOptions;
+use Poirot\TenderBinClient\Model\aMediaObject;
 
 
 class EntityAvatar

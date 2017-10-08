@@ -3,11 +3,10 @@ namespace Module\Profile\Actions;
 
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
-use Module\Profile\Model\Entity\Avatars\aMediaObject;
 use Module\Profile\Model\UploadAvatarHydrate;
-use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\TenderBinClient\Model\aMediaObject;
 
 
 class ModifyAvatarAction
