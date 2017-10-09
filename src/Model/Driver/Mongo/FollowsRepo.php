@@ -56,7 +56,7 @@ class FollowsRepo
      */
     function save(EntityFollow $entity)
     {
-        $e = new Mongo\EntityFollow();
+        $e = new Mongo\EntityFollow;
         $e
             ->setIncoming( $this->attainNextIdentifier($entity->getIncoming()) )
             ->setOutgoing( $this->attainNextIdentifier($entity->getOutgoing()) )

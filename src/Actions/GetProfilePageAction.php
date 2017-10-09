@@ -100,7 +100,7 @@ class GetProfilePageAction
         } else {
             // outward
             $outward = 'none';
-            if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
+            if ( $fe = $this->repoFollows->findOneWithInteraction($userid, $visitor) ) {
                 // only stat of pending and accepted are allows
                 $stat = $fe->getStat();
                 if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
@@ -109,7 +109,7 @@ class GetProfilePageAction
 
             // inward
             $inward = 'none';
-            if ( $fe = $this->repoFollows->findOneWithInteraction($userid, $visitor) ) {
+            if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
                 // only stat of pending and accepted are allows
                 $stat = $fe->getStat();
                 if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
