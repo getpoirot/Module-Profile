@@ -170,9 +170,10 @@ class GetProfilePageAction
 
         ## Event
         #
+
         $r = $this->event()
             ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
-                /** @see Content\Events\DataCollector */
+                /** @see Profile\Events\ */
                 'result' => $r, 'entity_profile' => $entity, 'visitor' => $visitor,
             ])
             ->then(function ($collector) {
