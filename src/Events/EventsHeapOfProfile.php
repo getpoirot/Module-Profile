@@ -60,9 +60,13 @@ class DataCollector
         return $this->visitor;
     }
 
-    function setEntityProfile(EntityProfile $post)
+    /**
+     * @param EntityProfile | null $profile
+     */
+
+    function setEntityProfile($profile)
     {
-        $this->entityProfile = $post;
+        $this->entityProfile = $profile;
     }
 
     function getEntityProfile()
