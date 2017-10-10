@@ -197,9 +197,10 @@ class ProfilesRepo
      * @return \Traversable
      */
 
-    function findAll($expr, $limit, $offset,$sort = self::MONGO_SORT_DESC)
+    function findAll(array $expr, $limit, $offset,$sort = self::MONGO_SORT_DESC)
     {
         # search term to mongo condition
+        $expr      = \Module\MongoDriver\parseExpressionFromArray($expr);
         $condition = \Module\MongoDriver\buildMongoConditionFromExpression($expr);
 
         if ($offset)

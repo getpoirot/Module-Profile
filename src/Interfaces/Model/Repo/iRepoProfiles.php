@@ -72,7 +72,7 @@ interface iRepoProfiles
      *
      * @return \Traversable
      */
-    function findAll($expr , $limit , $offset ,$sort);
+    function findAll(array $expr , $limit , $offset ,$sort);
 
     /**
      * Find All Users Has Avatar Profile
