@@ -33,6 +33,10 @@ class RetrieveProfiles
      */
     function __invoke(array $userIds, $mode = 'basic')
     {
+        if (empty($userIds))
+            // No Id(s) Given.
+            return [];
+
         # Retrieve User ID From OAuth
         #
         $oauthInfos = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($userIds) {
