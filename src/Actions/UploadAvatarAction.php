@@ -2,7 +2,6 @@
 namespace Module\Profile\Actions;
 
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
-use Module\Profile\Avatars\FactoryMediaObject;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Module\Profile\Model\UploadAvatarHydrate;
 use Module\Profile\Model\Entity\EntityAvatar;
@@ -11,6 +10,7 @@ use Poirot\ApiClient\TokenProviderSolid;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 use Poirot\Std\Exceptions\exUnexpectedValue;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class UploadAvatarAction

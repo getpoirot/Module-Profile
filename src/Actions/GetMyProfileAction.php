@@ -88,10 +88,10 @@ class GetMyProfileAction
                         'lat' => $entity->getLocation()->getGeo('lat'),
                     ],
                 ] : null, // TODO With privacy interaction
-                'birthday' => [ // TODO with privacy interaction
+                'birthday' => ($entity->getBirthday()) ? [
                     'datetime'  => $entity->getBirthday(),
                     'timestamp' => $entity->getBirthday()->getTimestamp(),
-                ],
+                ] : null,
             ] : null,
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,

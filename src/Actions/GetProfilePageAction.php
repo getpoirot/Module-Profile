@@ -160,10 +160,11 @@ class GetProfilePageAction
                             'lat' => $entity->getLocation()->getGeo('lat'),
                         ],
                     ] : null, // TODO With privacy interaction
-                    'birthday' => [ // TODO with privacy interaction
+                    // TODO with privacy interaction
+                    'birthday' => ($entity->getBirthday()) ? [
                         'datetime'  => $entity->getBirthday(),
                         'timestamp' => $entity->getBirthday()->getTimestamp(),
-                    ],
+                    ] : null,
                 ] : null,
             ],
         ];
