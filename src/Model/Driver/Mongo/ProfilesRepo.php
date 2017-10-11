@@ -165,6 +165,7 @@ class ProfilesRepo
      */
     function getUserPrivacyStatByUid($uid)
     {
+        /** @var iEntityProfile $e */
         $e = $this->_query()->findOne(
             [
                 'uid' => $this->attainNextIdentifier($uid)
@@ -177,7 +178,7 @@ class ProfilesRepo
             ]
         );
 
-        return $e;
+        return (string) $e->getPrivacyStatus();
     }
 
     /**

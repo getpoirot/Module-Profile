@@ -48,7 +48,7 @@ class GetMyFollowingsAction
         # List Whole Followers
         #
         // TODO Implement Pagination
-        $followers = $this->repoFollows->findAllForIncoming(
+        $followers = $this->repoFollows->findAllForOutgoings(
             $token->getOwnerIdentifier()
             , [
                 'stat' => EntityFollow::STAT_ACCEPTED
@@ -61,7 +61,7 @@ class GetMyFollowingsAction
         $r = []; $c = 0;
         /** @var EntityFollow $f */
         foreach ($followers as $f) {
-            $r[ (string) $f->getOutgoing() ] = [
+            $r[ (string) $f->getIncoming() ] = [
                 'request_id' => (string) $f->getUid(),
                 'created_on' => [
                     'datetime'  => $f->getDateTimeCreated(),

@@ -90,7 +90,7 @@ class GetUserFollowingsAction
         $r = []; $c = 0;
         /** @var EntityFollow $f */
         foreach ($followers as $f) {
-            $r[ (string) $f->getOutgoing() ] = [
+            $r[ (string) $f->getIncoming() ] = [
                 'request_id' => (string) $f->getUid(),
                 'created_on' => [
                     'datetime'  => $f->getDateTimeCreated(),
