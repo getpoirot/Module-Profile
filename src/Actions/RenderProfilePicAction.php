@@ -57,11 +57,16 @@ class RenderProfilePicAction
         $entity = $this->repoAvatars->findOneByOwnerUid( $userid );
         $r      = \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($entity);
 
+
+
         # Build Avatar Link
         #
         if ( $r['primary'] )
+            // TODO Fix this shit
+
             // Redirect To Object-Storage Url Of Media
-            $link = $r['primary']['_link'];
+            // http://optimizer.app-tech.co/?type=crop&size=75x75&url=storage.app-tech.co/bin/59e1f758eddb9e0a49327603/file.jpg
+            $link = 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=150x150&url='.$r['primary']['_link'].'/file.jpg';
         else
             // Default None-Profile Picture
             // TODO Configurable with merged config
