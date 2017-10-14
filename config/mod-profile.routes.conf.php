@@ -23,6 +23,19 @@ return [
         ],
 
         'routes' => [
+            // TODO with cli
+            'cron' => [
+                'route' => 'RouteSegment',
+                'options' => [
+                    'criteria'    => '/cron/cleanup',
+                    'match_whole' => false,
+                ],
+                'params'  => [
+                    ListenerDispatch::ACTIONS => [
+                        \Module\Profile\Actions\Cron\CronCleanupRequestsAction::class,
+                    ],
+                ],
+            ],
 
             'avatars' => [
                 'route' => 'RouteSegment',

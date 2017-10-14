@@ -3,8 +3,10 @@ namespace Module\Profile\Interfaces\Model\Repo;
 
 use Module\Profile\Model\Entity\EntityFollow;
 
+
 interface iRepoFollows
 {
+
     /**
      * Generate next unique identifier to persist
      * data with
@@ -47,6 +49,17 @@ interface iRepoFollows
     function findOneWithInteraction($incoming, $outgoing);
 
     /**
+     * Find All Follows Has Specific Status
+     *
+     * @param array  $status
+     * @param string $offset
+     * @param int    $limit
+     *
+     * @return \Traversable
+     */
+    function findAllHasStatus(array $status, $offset = null, $limit = null);
+
+    /**
      * Find All Follow Requests Match Incoming UID
      *
      * @param mixed $incoming
@@ -85,4 +98,13 @@ interface iRepoFollows
      * @return int
      */
     function getCountAllForOutgoing($outgoing, array $status = null);
+
+    /**
+     * Delete Entity By Given Id
+     *
+     * @param mixed $followId
+     *
+     * @return int
+     */
+    function deleteById($followId);
 }
