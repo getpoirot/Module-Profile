@@ -178,7 +178,7 @@ class ProfilesRepo
             ]
         );
 
-        return (string) $e->getPrivacyStatus();
+        return ($e) ? (string) $e->getPrivacyStatus() : null;
     }
 
     /**

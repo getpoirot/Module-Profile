@@ -154,6 +154,45 @@ class FollowsRepo
     }
 
     /**
+     * Find All Follows Has Specific Status
+     *
+     * @param array  $status
+     * @param string $offset
+     * @param int    $limit
+     *
+     * @return \Traversable
+     */
+    function findAllHasStatus(array $status, $offset = null, $limit = null)
+    {
+        $condition = [];
+
+        $or = [];
+        foreach ($status as $s)
+            $or[] = [ 'stat' =>  $s ];
+
+        if ($offset)
+            $condition = [
+                '_id' => [
+                    '$lt' => $this->attainNextIdentifier($offset), ]
+            ] + $condition;
+
+        $condition += [ '$or' => $or ];
+
+        $r = $this->_query()->find(
+            $condition
+            , [
+                'limit' => $limit,
+                'sort'  => [
+                    '_id' => -1,
+                ]
+            ]
+        );
+
+
+        return $r;
+    }
+
+    /**
      * Find All Follow Requests Match Incoming UID
      *
      * @param mixed $incoming
@@ -271,5 +310,22 @@ class FollowsRepo
         ]);
 
         return $crsr;
+    }
+
+    /**
+     * Delete Entity By Given Id
+     *
+     * @param mixed $followId
+     *
+     * @return int
+     */
+    function deleteById($followId)
+    {
+        $r = $this->_query()->deleteOne([
+            '_id' => $this->attainNextIdentifier($followId),
+        ]);
+
+
+        return $r->getDeletedCount();
     }
 }

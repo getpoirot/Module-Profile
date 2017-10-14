@@ -51,42 +51,30 @@ class UploadAvatarAction
         try {
             $avatar = new UploadAvatarHydrate($this->request);
 
-            $c = \Module\TenderBinClient\Services::ClientTender();
-
-            // Request Behalf of User as Owner With Toke
-            $c->setTokenProvider(new TokenProviderSolid(
-                new AccessTokenObject(['access_token' => $token->getIdentifier()])
-            ));
-
-            $r = $c->store(
-                fopen($avatar->getPic()->getTmpName(), 'rb')
-                , null
-                , $avatar->getPic()->getClientFilename()
-                , []
-                , null
-                , false
-            );
-
-            $binArr = $r['bindata'];
-
-            $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
-            if (! $entity ) {
-                $entity = new EntityAvatar;
-                $entity->setUid( $token->getOwnerIdentifier() );
-            }
-
-            if ($avatar->getAsPrimary())
-                $entity->setPrimary( $binArr['hash'] );
-
-            $entity->addMedia(FactoryMediaObject::of([
-                'hash'         => $binArr['hash'],
-                'content_type' => $binArr['content_type'],
-            ]));
-
         } catch (exUnexpectedValue $e) {
             // TODO Handle Validation ...
             throw new exUnexpectedValue('Validation Failed', null,  400, $e);
         }
+
+
+        ## Store Image Into Object Storage
+        #
+        $r      = $this->_storeAvatar($avatar, $token);
+        $binArr = $r['bindata'];
+
+        $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
+        if (! $entity ) {
+            $entity = new EntityAvatar;
+            $entity->setUid( $token->getOwnerIdentifier() );
+        }
+
+        if ( $avatar->getAsPrimary() )
+            $entity->setPrimary( $binArr['hash'] );
+
+        $entity->addMedia(FactoryMediaObject::of([
+            'hash'         => $binArr['hash'],
+            'content_type' => $binArr['content_type'],
+        ]));
 
 
         # Persist Entity
@@ -100,5 +88,28 @@ class UploadAvatarAction
             ListenerDispatch::RESULT_DISPATCH =>
                 \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($pEntity)
         ];
+    }
+
+    // ..
+
+    function _storeAvatar(UploadAvatarHydrate $avatar, iAccessToken $token)
+    {
+        $c = \Module\TenderBinClient\Services::ClientTender();
+
+        // Request Behalf of User as Owner With Token
+        $c->setTokenProvider(new TokenProviderSolid(
+            new AccessTokenObject(['access_token' => $token->getIdentifier()])
+        ));
+
+        $r = $c->store(
+            fopen($avatar->getPic()->getTmpName(), 'rb')
+            , null
+            , $avatar->getPic()->getClientFilename()
+            , []
+            , null
+            , false );
+
+
+        return $r;
     }
 }

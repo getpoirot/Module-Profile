@@ -37,6 +37,9 @@ class UploadAvatarHydrate
         if (! $this->pic instanceof UploadedFile)
             throw new exUnexpectedValue('pic must be uploaded file.');
 
+        if ( $this->pic->getSize() > 2000000 )
+            throw new exUnexpectedValue('File more than 2Mb Not Allowed.');
+
         if ($this->pic->getClientMediaType() !== 'image/jpeg')
             throw new exUnexpectedValue('Only Jpeg Files Is Allowed!');
 
