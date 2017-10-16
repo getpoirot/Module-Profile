@@ -1,10 +1,10 @@
 <?php
 namespace Module\Profile\Actions;
 
+use Poirot\Http\HttpResponse;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Poirot\Http\Header\FactoryHttpHeader;
-use Poirot\Http\HttpResponse;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -63,10 +63,9 @@ class RenderProfilePicAction
         #
         if ( $r['primary'] )
             // TODO Fix this shit
-
             // Redirect To Object-Storage Url Of Media
             // http://optimizer.app-tech.co/?type=crop&size=75x75&url=storage.app-tech.co/bin/59e1f758eddb9e0a49327603/file.jpg
-            $link = 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=150x150&url='.$r['primary']['_link'].'/file.jpg';
+            $link = 'http://'.SERVER_OPTIMIZER.'/?type=crop&size=150x150&url='.$r['primary']['_link'].'/file.jpg';
         else
             // Default None-Profile Picture
             // TODO Configurable with merged config
