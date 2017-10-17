@@ -39,7 +39,7 @@ return [
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id' => 1]],
-                        // TODO Put Indexes
+                        ['key' => ['uid' => 1]],
                     ],],],
 
             \Module\Profile\Model\Driver\Mongo\AvatarsRepoService::class => [
@@ -51,7 +51,7 @@ return [
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id' => 1]],
-                        // TODO Put Indexes
+                        ['key' => ['uid' => 1]],
                     ],],],
 
             \Module\Profile\Model\Driver\Mongo\FollowsRepoService::class => [
@@ -63,8 +63,13 @@ return [
                     // ensure indexes
                     'indexes' => [
                         ['key' => ['_id' => 1]],
-                        // TODO Put Indexes
-                        // TODO Compound Index incoming-outgoing unique remove duplicates
+                        ['key' => ['stat' => 1]],
+                        ['key' => ['incoming' => -1]],
+                        ['key' => ['incoming' => -1, 'stat' => 1]],
+                        ['key' => ['outgoing' => -1]],
+                        ['key' => ['outgoing' => -1, 'stat' => 1]],
+                        ['key' => ['incoming' => -1, 'outgoing' => -1]],
+
                     ],],],
         ],
     ],
