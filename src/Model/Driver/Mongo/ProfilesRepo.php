@@ -242,8 +242,8 @@ class ProfilesRepo
             ];
 
         $q = [
-            [ '$limit' => $limit ],
             [ '$sort' => ['_id' => -1], ],
+            [ '$limit' => $limit ],
             [ '$lookup' => [
                 'from'         => 'profile.users.avatars',
                 'localField'   => 'uid',
