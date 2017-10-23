@@ -105,7 +105,11 @@ class UploadAvatarAction
             fopen($avatar->getPic()->getTmpName(), 'rb')
             , null
             , $avatar->getPic()->getClientFilename()
-            , []
+            , [
+                '_segment'         => 'avatar',
+                '__before_created' => '{ "optimage": {"type": "crop", "size": "400x400", "q": 80} }',
+                '__after_created'  => '{ "versions": [ {"thumb": {"optimage": {"type": "crop", "size": "90x90", "q": 80}} } ]}',
+            ]
             , null
             , false );
 

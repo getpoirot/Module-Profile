@@ -60,7 +60,31 @@ namespace Module\Profile\Avatars
             $r = [];
 
         } else {
+            /*
+             * [
+             *   [
+                    [storage_type] => tenderbin
+                    [hash] => 59eda4e595a8c1035460b282
+                    [content_type] => image/jpeg
+                    [_link] => http://storage.apanajapp.com/bin/59eda4e595a8c1035460b282
+                 ]
+                 ...
+               ]
+             */
             $r = \Poirot\TenderBinClient\embedLinkToMediaData( $avatars->getMedias() );
+
+
+            ## Embed Versions Into Response
+            #
+            foreach ($r as $i => $m) {
+                $link = $m['_link'];
+                $r[$i]['_link'] = [
+                    'origin' => $link,
+                    'thumb'  => $link.'?ver=thumb',
+                ];
+            }
+
+
             $p = current($r); // first as primary profile pic
             /** @var aMediaObject $m */
             foreach ($r as $m) {
