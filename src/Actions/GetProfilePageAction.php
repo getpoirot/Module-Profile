@@ -175,7 +175,7 @@ class GetProfilePageAction
         $r = $this->event()
             ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
                 /** @see Profile\Events\ */
-                'result' => $r, 'entity_profile' => $entity, 'visitor' => $visitor,
+                'result' => $r, 'userid' => $userid, 'entity_profile' => $entity, 'visitor' => $visitor,
             ])
             ->then(function ($collector) {
                 /** @var \Module\Profile\Events\DataCollector $collector */

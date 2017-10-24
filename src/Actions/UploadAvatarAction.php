@@ -62,6 +62,9 @@ class UploadAvatarAction
         $r      = $this->_storeAvatar($avatar, $token);
         $binArr = $r['bindata'];
 
+
+        ## Set Image As Avatar
+        #
         $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
         if (! $entity ) {
             $entity = new EntityAvatar;
