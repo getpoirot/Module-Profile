@@ -6,6 +6,8 @@ use Module\Profile\Model\Entity\EntityFollow;
 
 interface iRepoFollows
 {
+    const SORT_ASC   = 'asc';
+    const SORT_DESC  = 'desc';
 
     /**
      * Generate next unique identifier to persist
@@ -62,12 +64,15 @@ interface iRepoFollows
     /**
      * Find All Follow Requests Match Incoming UID
      *
-     * @param mixed $incoming
-     * @param array $status   If given filter for these specific status
+     * @param mixed  $incoming
+     * @param array  $status   If given filter for these specific status
+     * @param string $limit
+     * @param string $offset;
+     * @param mixed  $sort
      *
      * @return \Traversable
      */
-    function findAllForIncoming($incoming, array $status = null);
+    function findAllForIncoming($incoming, array $status = null ,$limit ,$offset ,$sort=self::SORT_DESC);
 
     /**
      * Get Count All Incoming Request For
@@ -82,12 +87,14 @@ interface iRepoFollows
     /**
      * Find All Follow Requests Match Outgoing UID
      *
-     * @param mixed $outgoing
-     * @param array $status   If given filter for these specific status
-     *
+     * @param mixed   $outgoing
+     * @param array   $status   If given filter for these specific status
+     * @param string  $limit
+     * @param string  $offset;
+     * @param mixed   $sort
      * @return \Traversable
      */
-    function findAllForOutgoings($outgoing, array $status = null);
+    function findAllForOutgoings($outgoing, array $status = null ,$limit ,$offset ,$sort=self::SORT_DESC);
 
     /**
      * Get Count All Outgoing Request For

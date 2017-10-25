@@ -192,19 +192,30 @@ class FollowsRepo
         return $r;
     }
 
+
     /**
      * Find All Follow Requests Match Incoming UID
      *
-     * @param mixed $incoming
-     * @param array $status   If given filter for these specific status
+     * @param mixed  $incoming
+     * @param array  $status   If given filter for these specific status
+     * @param string $limit
+     * @param string $offset;
+     * @param mixed  $sort
      *
      * @return \Traversable
      */
-    function findAllForIncoming($incoming, array $status = null)
+    function findAllForIncoming($incoming, array $status = null ,$limit ,$offset ,$sort =self::SORT_DESC)
     {
         $condition = [
             'incoming' => $this->attainNextIdentifier($incoming)
         ];
+
+        if ($offset)
+            $condition = [
+                    '_id' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] + $condition;
 
         if ($status) {
             $or = [];
@@ -216,6 +227,11 @@ class FollowsRepo
 
 
         $crsr = $this->_query()->find($condition, [
+
+            'limit' => $limit,
+            'sort'  =>[
+                '_id' => ($sort == self::SORT_DESC) ? -1 : 1,
+            ],
             'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
         ]);
 
@@ -255,12 +271,14 @@ class FollowsRepo
     /**
      * Find All Follow Requests Match Outgoing UID
      *
-     * @param mixed $outgoing
-     * @param array $status   If given filter for these specific status
-     *
+     * @param mixed   $outgoing
+     * @param array   $status   If given filter for these specific status
+     * @param string  $limit
+     * @param string  $offset;
+     * @param mixed   $sort
      * @return \Traversable
      */
-    function findAllForOutgoings($outgoing, array $status = null)
+    function findAllForOutgoings($outgoing, array $status = null,$limit ,$offset ,$sort =self::SORT_DESC)
     {
         $condition = [
             'outgoing' => $this->attainNextIdentifier($outgoing)
@@ -274,8 +292,19 @@ class FollowsRepo
             $condition += [ '$or' => $or ];
         }
 
+        if ($offset)
+            $condition = [
+                    '_id' => [
+                        '$lt' => $this->attainNextIdentifier($offset),
+                    ]
+                ] + $condition;
+
 
         $crsr = $this->_query()->find($condition, [
+            'limit' => $limit,
+            'sort'  =>[
+                '_id' => ($sort == self::SORT_DESC) ? -1 : 1,
+            ],
             'readPreference' => new ReadPreference(ReadPreference::RP_NEAREST)
         ]);
 
