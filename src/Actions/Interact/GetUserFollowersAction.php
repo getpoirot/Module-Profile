@@ -77,22 +77,24 @@ class GetUserFollowersAction
 
         # List Whole Followers
         #
-        $q = ParseRequestData::_($this->request)->parseQueryParams();
-        $limit   = isset($q['limit']) ? $q['limit'] : 10;
-
+        $q       = ParseRequestData::_($this->request)->parseQueryParams();
+        $limit   = isset($q['limit'])  ? $q['limit']  : 30;
         $offset  = isset($q['offset']) ? $q['offset'] : null;
-        // TODO Implement Pagination
+
         $followers = $this->repoFollows->findAllForIncoming(
             $userid
             , [
                 'stat' => EntityFollow::STAT_ACCEPTED
-            ],$limit+1,$offset,iRepoFollows::SORT_DESC
+            ]
+            , $limit+1
+            , $offset
+            , iRepoFollows::SORT_DESC
         );
 
 
         # Build Response
         #
-        $nextOffset=null;
+        $nextOffset = null;
         $r = []; $c = 0;
         /** @var EntityFollow $f */
         foreach ($followers as $f) {

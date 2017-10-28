@@ -198,13 +198,13 @@ class FollowsRepo
      *
      * @param mixed  $incoming
      * @param array  $status   If given filter for these specific status
-     * @param string $limit
+     * @param int    $limit
      * @param string $offset;
      * @param mixed  $sort
      *
      * @return \Traversable
      */
-    function findAllForIncoming($incoming, array $status = null ,$limit ,$offset ,$sort =self::SORT_DESC)
+    function findAllForIncoming($incoming, array $status = null, $limit = 30, $offset = null, $sort = self::SORT_DESC)
     {
         $condition = [
             'incoming' => $this->attainNextIdentifier($incoming)
@@ -227,7 +227,6 @@ class FollowsRepo
 
 
         $crsr = $this->_query()->find($condition, [
-
             'limit' => $limit,
             'sort'  =>[
                 '_id' => ($sort == self::SORT_DESC) ? -1 : 1,
@@ -273,12 +272,12 @@ class FollowsRepo
      *
      * @param mixed   $outgoing
      * @param array   $status   If given filter for these specific status
-     * @param string  $limit
+     * @param int     $limit
      * @param string  $offset;
      * @param mixed   $sort
      * @return \Traversable
      */
-    function findAllForOutgoings($outgoing, array $status = null,$limit ,$offset ,$sort =self::SORT_DESC)
+    function findAllForOutgoings($outgoing, array $status = null, $limit = 30, $offset = null, $sort=self::SORT_DESC)
     {
         $condition = [
             'outgoing' => $this->attainNextIdentifier($outgoing)
