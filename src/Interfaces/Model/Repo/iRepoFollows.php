@@ -66,13 +66,13 @@ interface iRepoFollows
      *
      * @param mixed  $incoming
      * @param array  $status   If given filter for these specific status
-     * @param string $limit
+     * @param int    $limit
      * @param string $offset;
      * @param mixed  $sort
      *
      * @return \Traversable
      */
-    function findAllForIncoming($incoming, array $status = null ,$limit ,$offset ,$sort=self::SORT_DESC);
+    function findAllForIncoming($incoming, array $status = null, $limit = 30, $offset = null, $sort = self::SORT_DESC);
 
     /**
      * Get Count All Incoming Request For
@@ -89,12 +89,12 @@ interface iRepoFollows
      *
      * @param mixed   $outgoing
      * @param array   $status   If given filter for these specific status
-     * @param string  $limit
+     * @param int     $limit
      * @param string  $offset;
      * @param mixed   $sort
      * @return \Traversable
      */
-    function findAllForOutgoings($outgoing, array $status = null ,$limit ,$offset ,$sort=self::SORT_DESC);
+    function findAllForOutgoings($outgoing, array $status = null, $limit = 30, $offset = null, $sort=self::SORT_DESC);
 
     /**
      * Get Count All Outgoing Request For

@@ -74,19 +74,21 @@ class GetUserFollowingsAction
         // TODO check users interaction privacy
 
         #
-        $q = ParseRequestData::_($this->request)->parseQueryParams();
+        $q       = ParseRequestData::_($this->request)->parseQueryParams();
         $limit   = isset($q['limit']) ? $q['limit'] : 10;
-
         $offset  = isset($q['offset']) ? $q['offset'] : null;
+
 
         # List Whole Followers
         #
-        // TODO Implement Pagination
         $followers = $this->repoFollows->findAllForOutgoings(
             $userid
             , [
                 'stat' => EntityFollow::STAT_ACCEPTED
-            ],$limit+1,$offset,iRepoFollows::SORT_DESC
+            ]
+            , $limit+1
+            , $offset
+            , iRepoFollows::SORT_DESC
         );
 
 
