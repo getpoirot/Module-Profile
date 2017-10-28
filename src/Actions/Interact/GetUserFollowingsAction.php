@@ -6,6 +6,7 @@ use Module\Profile\Actions\aAction;
 use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityFollow;
+use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
@@ -72,7 +73,11 @@ class GetUserFollowingsAction
 
         // TODO check users interaction privacy
 
+        #
+        $q = ParseRequestData::_($this->request)->parseQueryParams();
+        $limit   = isset($q['limit']) ? $q['limit'] : 10;
 
+        $offset  = isset($q['offset']) ? $q['offset'] : null;
 
         # List Whole Followers
         #
@@ -81,15 +86,18 @@ class GetUserFollowingsAction
             $userid
             , [
                 'stat' => EntityFollow::STAT_ACCEPTED
-            ]
+            ],$limit+1,$offset,iRepoFollows::SORT_DESC
         );
 
 
         # Build Response
         #
+        $nextOffset=null;
+
         $r = []; $c = 0;
         /** @var EntityFollow $f */
         foreach ($followers as $f) {
+            $nextOffset = (string)$f->getUid();
             $r[ (string) $f->getIncoming() ] = [
                 'request_id' => (string) $f->getUid(),
                 'created_on' => [
@@ -119,10 +127,25 @@ class GetUserFollowingsAction
                 $r[$uid]['user'] = $user;
         }
 
+        ## Build Link_more
+        #
+        $linkMore = null;
+        if (count($r) > $limit) {
+            array_pop($r);
+
+            $linkMore   = \Module\HttpFoundation\Actions::url(null);
+            $linkMore   = (string) $linkMore->uri()->withQuery('offset='.($nextOffset).'&limit='.$limit);
+        }
+
         return [
             ListenerDispatch::RESULT_DISPATCH => [
                 'count' => $c,
                 'items' => array_values($r),
+                '_link_more' => $linkMore,
+                '_self' => [
+                    'offset' => $offset,
+                    'limit'  => $limit,
+                ],
             ]
         ];
     }
