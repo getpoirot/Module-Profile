@@ -104,6 +104,8 @@ class RetrieveProfiles
                 'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                     ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC
             ];
+            if ($mode=='contact')
+                $r[$uid]['mobile']=$oauthInfo['user']['mobile']['number'];
         }
 
         return $r;
