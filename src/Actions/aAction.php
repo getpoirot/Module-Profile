@@ -1,7 +1,6 @@
 <?php
 namespace Module\Profile\Actions;
 
-use Module\Profile\Actions\Helpers\RetrieveProfiles;
 use Module\Profile\Events\EventsHeapOfProfile;
 use Poirot\Application\Exception\exAccessDenied;
 use Poirot\Events\Event\BuildEvent;
@@ -11,13 +10,6 @@ use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
 
 
-/**
- * # Registered Module Action:
- *
- * @see                        RetrieveProfiles
- * @method array               RetrieveProfiles(array $userIds, $mode='basic')
- * ..........................................................................................................
- */
 abstract class aAction
     extends \Module\Foundation\Actions\aAction
     implements iEventProvider

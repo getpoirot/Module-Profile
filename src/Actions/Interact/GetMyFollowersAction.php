@@ -85,9 +85,16 @@ class GetMyFollowersAction
         # Retrieve Users Account Info
         #
         if (! empty($r) ) {
-            $profiles = $this->RetrieveProfiles(array_keys($r));
-            foreach ($profiles as $uid => $user)
-                $r[$uid]['user'] = $user;
+            $profiles = \Module\Profile\Actions::RetrieveProfiles(array_keys($r));
+
+            foreach ($r as $uid => $rq) {
+                if (! isset($profiles[$uid]) ) {
+                    unset($r[$uid]);
+                    continue;
+                }
+
+                $r[$uid]['user'] = $profiles[$uid];
+            }
         }
 
         return [
