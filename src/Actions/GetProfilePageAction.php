@@ -61,7 +61,7 @@ class GetProfilePageAction
     {
         # Assert Token
         #
-        $this->assertTokenByOwnerAndScope($token);
+       // $this->assertTokenByOwnerAndScope($token);
 
         if ($username !== null) {
             // Retrieve User Info From OAuth By username
@@ -84,44 +84,49 @@ class GetProfilePageAction
             });
         }
 
-        $visitor = $token->getOwnerIdentifier();
+        $visitor  = null;
+        $relation = null;
+
+        if ($token)
+        {
+            $visitor = $token->getOwnerIdentifier();
+            # Find Relation Between Users
+            #
+            if ($visitor == $userid) {
+                // You visit Yourself!!
+                $relation = null;
+            } else {
+                // outward
+                $outward = 'none';
+                if ( $fe = $this->repoFollows->findOneWithInteraction($userid, $visitor) ) {
+                    // only stat of pending and accepted are allows
+                    $stat = $fe->getStat();
+                    if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
+                        $outward = $stat;
+                }
+
+                // inward
+                $inward = 'none';
+                if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
+                    // only stat of pending and accepted are allows
+                    $stat = $fe->getStat();
+                    if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
+                        $inward = $stat;
+                }
+
+                $relation = [
+                    'outward' => $outward,
+                    'inward'  => $inward,
+                ];
+            }
+
+
+        }
 
 
         # Retrieve Avatars For User
         #
         $entity = $this->repoProfiles->findOneByUID( $userid );
-
-
-        # Find Relation Between Users
-        #
-        if ($visitor == $userid) {
-            // You visit Yourself!!
-            $relation = null;
-        } else {
-            // outward
-            $outward = 'none';
-            if ( $fe = $this->repoFollows->findOneWithInteraction($userid, $visitor) ) {
-                // only stat of pending and accepted are allows
-                $stat = $fe->getStat();
-                if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
-                    $outward = $stat;
-            }
-
-            // inward
-            $inward = 'none';
-            if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
-                // only stat of pending and accepted are allows
-                $stat = $fe->getStat();
-                if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
-                    $inward = $stat;
-            }
-
-            $relation = [
-                'outward' => $outward,
-                'inward'  => $inward,
-            ];
-        }
-
 
         # Count Statistics
         #
@@ -171,16 +176,16 @@ class GetProfilePageAction
 
         ## Event
         #
-
-        $r = $this->event()
-            ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
-                /** @see Profile\Events\ */
-                'result' => $r, 'userid' => $userid, 'entity_profile' => $entity, 'visitor' => $visitor,
-            ])
-            ->then(function ($collector) {
-                /** @var \Module\Profile\Events\DataCollector $collector */
-                return $collector->getResult();
-            });
+        if ($visitor)
+            $r = $this->event()
+                ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
+                    /** @see Profile\Events\ */
+                    'result' => $r, 'userid' => $userid, 'entity_profile' => $entity, 'visitor' => $visitor,
+             ])
+                ->then(function ($collector) {
+                    /** @var \Module\Profile\Events\DataCollector $collector */
+                    return $collector->getResult();
+                });
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r
