@@ -60,7 +60,7 @@ class UploadAvatarAction
         ## Store Image Into Object Storage
         #
         $r      = $this->_storeAvatar($avatar, $token);
-        $binArr = $r;
+        $binArr = $r['bindata'];
 
 
         ## Set Image As Avatar

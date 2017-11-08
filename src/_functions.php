@@ -80,7 +80,9 @@ namespace Module\Profile\Avatars
                 $link = $m['_link'];
                 $r[$i]['_link'] = [
                     'origin' => $link,
-                    'thumb'  => $link.'?ver=thumb',
+                    // TODO Dirty fix; remove from optimizer
+                    'thumb'  => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
+//                    'thumb'  => $link.'?ver=thumb',
                 ];
             }
 
