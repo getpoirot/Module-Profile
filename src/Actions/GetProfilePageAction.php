@@ -171,6 +171,7 @@ class GetProfilePageAction
                         'timestamp' => $entity->getBirthday()->getTimestamp(),
                     ] : null,
                 ] : null,
+                'share'=> (string)\Module\HttpFoundation\Actions::url(null)->uri(),
             ],
         ];
 
