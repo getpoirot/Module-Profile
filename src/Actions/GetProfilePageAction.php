@@ -61,7 +61,7 @@ class GetProfilePageAction
     {
         # Assert Token
         #
-        # $this->assertTokenByOwnerAndScope($token);
+        // $this->assertTokenByOwnerAndScope($token);
 
         if ($username !== null) {
             // Retrieve User Info From OAuth By username
@@ -107,21 +107,21 @@ class GetProfilePageAction
                 $stat = $fe->getStat();
                 if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
                     $outward = $stat;
-            }
+                }
 
-            // inward
-            $inward = 'none';
-            if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
-                // only stat of pending and accepted are allows
-                $stat = $fe->getStat();
-                if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
-                    $inward = $stat;
-            }
+                // inward
+                $inward = 'none';
+                if ( $fe = $this->repoFollows->findOneWithInteraction($visitor, $userid) ) {
+                    // only stat of pending and accepted are allows
+                    $stat = $fe->getStat();
+                    if (in_array($stat, [EntityFollow::STAT_ACCEPTED, EntityFollow::STAT_PENDING]))
+                        $inward = $stat;
+                }
 
-            $relation = [
-                'outward' => $outward,
-                'inward'  => $inward,
-            ];
+                $relation = [
+                    'outward' => $outward,
+                    'inward'  => $inward,
+                ];
         }
 
 
