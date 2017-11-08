@@ -1,9 +1,9 @@
 <?php
 namespace Module\Profile\Events;
 
-use Module\Profile\Model\Entity\EntityProfile;
 use Poirot\Events\Event;
 use Poirot\Events\EventHeap;
+use Module\Profile\Model\Entity\EntityProfile;
 
 
 class EventsHeapOfProfile

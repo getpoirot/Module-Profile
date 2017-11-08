@@ -61,7 +61,7 @@ class GetProfilePageAction
     {
         # Assert Token
         #
-        $this->assertTokenByOwnerAndScope($token);
+        # $this->assertTokenByOwnerAndScope($token);
 
         if ($username !== null) {
             // Retrieve User Info From OAuth By username
@@ -84,7 +84,9 @@ class GetProfilePageAction
             });
         }
 
-        $visitor = $token->getOwnerIdentifier();
+        $visitor = null;
+        if ($token)
+            $visitor = $token->getOwnerIdentifier();
 
 
         # Retrieve Avatars For User
@@ -169,9 +171,9 @@ class GetProfilePageAction
             ],
         ];
 
+
         ## Event
         #
-
         $r = $this->event()
             ->trigger(EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT, [
                 /** @see Profile\Events\ */
@@ -181,6 +183,7 @@ class GetProfilePageAction
                 /** @var \Module\Profile\Events\DataCollector $collector */
                 return $collector->getResult();
             });
+
 
         return [
             ListenerDispatch::RESULT_DISPATCH => $r

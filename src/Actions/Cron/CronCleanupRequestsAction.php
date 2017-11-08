@@ -36,13 +36,16 @@ class CronCleanupRequestsAction
 
         $r = $this->repoFollows->findAllHasStatus([EntityFollow::STAT_REJECTED], null, 50);
         /** @var EntityFollow $fe */
+        $i = 0;
         foreach ($r as $fe) {
             $this->repoFollows->deleteById($fe->getUid());
 
             // Sleep for half of second
             usleep(500000);
+            $i++;
         }
 
+        echo sprintf('Deleted %s Item(s).', $i);
         die;
     }
 }
