@@ -66,8 +66,8 @@ class RenderProfilePicAction
             // Redirect To Object-Storage Url Of Media
             // http://optimizer.app-tech.co/?type=crop&size=75x75&url=storage.app-tech.co/bin/59e1f758eddb9e0a49327603/file.jpg
             // TODO Dirty fix; remove from optimizer
-            $link = 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$r['primary']['_link']['origin'].'/file.jpg';
-//            $link = $r['primary']['_link']['thumb'];
+//            $link = 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=200x200&url='.$r['primary']['_link']['origin'].'/file.jpg';
+            $link = $r['primary']['_link']['thumb'];
         }
         else
             // Default None-Profile Picture
