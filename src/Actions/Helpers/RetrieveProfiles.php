@@ -37,6 +37,13 @@ class RetrieveProfiles
             // No Id(s) Given.
             return [];
 
+        ## Normalize User Ids
+        #
+        foreach ($userIds as $i => $id)
+            if (! is_string($id) )
+                $userIds[$i] = (string) $id;
+
+
         # Retrieve User ID From OAuth
         #
         $oauthInfos = $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($userIds) {
@@ -87,10 +94,12 @@ class RetrieveProfiles
         # Build Response
         #
         $r = [];
-        foreach ($oauthUsers as $oauthInfo)
-        {
-            $uid    = $oauthInfo['user']['uid'];
-            $entity = @$profiles[ $uid ];
+        foreach ($userIds as $uid) {
+            if (! isset($oauthUsers[$uid]))
+                continue;
+
+            $oauthInfo = $oauthUsers[$uid];
+            $entity    = @$profiles[ $uid ];
 
             $r[$uid] = [
                 'uid'      => $uid,
