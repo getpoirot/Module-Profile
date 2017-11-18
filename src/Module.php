@@ -41,9 +41,6 @@ namespace Module\Profile
          */
         function initialize($sapi)
         {
-            if ( \Poirot\isCommandLine( $sapi->getSapiName() ) )
-                // Sapi Is Not HTTP. SKIP Module Load!!
-                return false;
         }
 
         /**
