@@ -27,5 +27,6 @@ return [
         'RemoveFromFriendsAction'   => \Module\Profile\Actions\Interact\RemoveFromFriendsAction::class,
         'KickUserAction'            => \Module\Profile\Actions\Interact\KickUserAction::class,
         'RetrieveProfiles'          => \Module\Profile\Actions\Helpers\RetrieveProfiles::class,
+        'IsUserTrusted'             => \Module\Profile\Actions\Helpers\IsUserTrusted::class,
     ],
 ];

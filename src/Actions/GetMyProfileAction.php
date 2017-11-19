@@ -95,6 +95,7 @@ class GetMyProfileAction
             ] : null,
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
+            'trusted'          =>\Module\Profile\Actions::IsUserTrusted($oauthInfo['user']['uid']),
             'is_valid' => $oauthInfo['is_valid'],
             'is_valid_more' => $oauthInfo['is_valid_more'],
         ];

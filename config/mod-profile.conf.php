@@ -6,6 +6,11 @@ return [
 
     Module\Profile\Module::CONF => [
 
+
+        'trusted' => [
+            '59feedd9b9a0e8014a554892',
+        ],
+
         ## Events
         #
         \Module\Profile\Actions\aAction::CONF => [

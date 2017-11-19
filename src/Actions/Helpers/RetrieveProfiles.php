@@ -111,7 +111,8 @@ class RetrieveProfiles
                     , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT | Url::ENCODE_URL
                 ),
                 'privacy_stat' => ($entity && $entity->getPrivacyStatus())
-                    ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC
+                    ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
+                'trusted'          =>\Module\Profile\Actions::IsUserTrusted($uid),
             ];
 
             if ($mode == 'contact')

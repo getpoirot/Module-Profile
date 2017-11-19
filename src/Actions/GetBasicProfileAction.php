@@ -90,7 +90,9 @@ class GetBasicProfileAction
                 , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
             ),
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
-                ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC
+                ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
+            'trusted'          =>\Module\Profile\Actions::IsUserTrusted($oauthInfo['user']['uid']),
+
         ];
 
         return [

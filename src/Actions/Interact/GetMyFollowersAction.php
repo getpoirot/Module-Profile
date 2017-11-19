@@ -84,6 +84,9 @@ class GetMyFollowersAction
 
         # Retrieve Users Account Info
         #
+        $profiles = \Module\Profile\Actions::IsUserTrusted("dfdf");
+
+
         if (! empty($r) ) {
             $profiles = \Module\Profile\Actions::RetrieveProfiles(array_keys($r));
 

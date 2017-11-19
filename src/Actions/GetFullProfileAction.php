@@ -92,6 +92,7 @@ class GetFullProfileAction
             ),
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
+            'trusted'          =>\Module\Profile\Actions::IsUserTrusted($oauthInfo['user']['uid']),
             'personal' => ($entity) ? [
                 'bio'      => (string) $entity->getBio(),
                 'gender'   => (string) $entity->getGender(),
