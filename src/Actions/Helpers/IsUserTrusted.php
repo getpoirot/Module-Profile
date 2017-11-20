@@ -1,10 +1,7 @@
 <?php
 namespace Module\Profile\Actions\Helpers;
 
-use Module\HttpFoundation\Actions\Url;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
-use Module\Profile\Model\Entity\EntityProfile;
-use Module\Profile\Module;
 
 
 class IsUserTrusted
@@ -12,7 +9,7 @@ class IsUserTrusted
     /** @var iRepoProfiles */
     protected $repoProfiles;
 
-    protected $trustedUser=null;
+    protected $trustedUsers = [];
 
 
     /**
@@ -35,20 +32,18 @@ class IsUserTrusted
      */
     function __invoke($userId=null)
     {
-
-            $trustedUser  =$this->getTrustedUser();
-
-        $trusted= in_array($userId,$trustedUser);
-
-        return $trusted;
+        $trustedUser = $this->_getTrustedUsers();
+        return in_array($userId, $trustedUser);
     }
 
 
-    protected function getTrustedUser()
+    // ..
+
+    protected function _getTrustedUsers()
     {
-        if (is_null($this->trustedUser))
-             return $this->trustedUser  = \Module\Foundation\Actions::config(\Module\Profile\Module::CONF, 'trusted');
+        if ( is_null($this->trustedUsers) )
+             $this->trustedUsers  = \Module\Foundation\Actions::config(\Module\Profile\Module::CONF, 'trusted');
 
-
+        return $this->trustedUsers;
     }
 }

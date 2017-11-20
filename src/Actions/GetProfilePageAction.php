@@ -148,7 +148,9 @@ class GetProfilePageAction
             ),
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
-            'trusted'          =>\Module\Profile\Actions::IsUserTrusted($oauthInfo['user']['uid']),
+
+            'trusted'      => \Module\Profile\Actions::IsUserTrusted($oauthInfo['user']['uid']),
+
             'relation' => $relation,
             'followers_count'  => $cntFollowers,
             'followings_count' => $cntFollowings,

@@ -73,8 +73,6 @@ class GetUserFollowersAction
 
         // TODO check users interaction privacy
 
-
-
         # List Whole Followers
         #
         $q       = ParseRequestData::_($this->request)->parseQueryParams();
@@ -138,7 +136,7 @@ class GetUserFollowersAction
         ## Build Link_more
         #
         $linkMore = null;
-        if (count($r) > $limit) {
+        if ($c > $limit) {
             array_pop($r);
 
             $linkMore   = \Module\HttpFoundation\Actions::url(null);
@@ -154,8 +152,7 @@ class GetUserFollowersAction
                     'offset' => $offset,
                     'limit'  => $limit,
                 ],
-
-            ]
+            ],
         ];
     }
 }

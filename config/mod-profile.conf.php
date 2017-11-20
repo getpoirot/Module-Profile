@@ -6,10 +6,13 @@ return [
 
     Module\Profile\Module::CONF => [
 
-
+        ## Users/Profile Who Considered as Trusted
+        #
         'trusted' => [
-            '59feedd9b9a0e8014a554892',
+            // user-id
+            # '59feedd9b9a0e8014a554892',
         ],
+
 
         ## Events
         #

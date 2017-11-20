@@ -136,10 +136,11 @@ class GetUserFollowingsAction
             }
         }
 
+
         ## Build Link_more
         #
         $linkMore = null;
-        if (count($r) > $limit) {
+        if ($c > $limit) {
             array_pop($r);
 
             $linkMore   = \Module\HttpFoundation\Actions::url(null);

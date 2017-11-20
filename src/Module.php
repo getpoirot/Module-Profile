@@ -149,12 +149,13 @@ namespace Module\Profile
     use Module\Profile\Actions\Helpers\RetrieveProfiles;
     use Module\Profile\Actions\Helpers\IsUserTrusted;
 
+
     /**
      * @see    RetrieveProfiles
      * @method static array RetrieveProfiles(array $userIds, $mode='basic')
+     * ..........................................
      * @see    IsUserTrusted
      * @method static array IsUserTrusted(string $userId)
-     * ..........................................
      */
     class Actions extends \IOC
     { }

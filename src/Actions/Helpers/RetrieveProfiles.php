@@ -112,7 +112,9 @@ class RetrieveProfiles
                 ),
                 'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                     ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
-                'trusted'          =>\Module\Profile\Actions::IsUserTrusted($uid),
+
+
+                'trusted'      => \Module\Profile\Actions::IsUserTrusted($uid),
             ];
 
             if ($mode == 'contact')
