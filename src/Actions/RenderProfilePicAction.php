@@ -78,7 +78,7 @@ class RenderProfilePicAction
         # Build Response
         #
         $response = new HttpResponse;
-        $response->setStatusCode(200); // permanently moved
+        $response->setStatusCode(301); // permanently moved
         $response->headers()
             ->insert(FactoryHttpHeader::of(['Location' => $link, ]))
             ->insert(FactoryHttpHeader::of(['Cache-Control' => 'no-cache, no-store, must-revalidate',]))
