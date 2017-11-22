@@ -314,7 +314,7 @@ return [
                 'route' => 'RouteSegment',
                 'options' => [
                     // 24 is length of user_id by persistence
-                    'criteria'    => '/<@:username~[a-zA-Z.]+~><-:userid~\w{24}~>',
+                    'criteria'    => '/<u/:username~[a-zA-Z0-9._]+~><-:userid~\w{24}~>',
                     'match_whole' => false,
                 ],
                 'routes' => [

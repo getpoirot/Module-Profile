@@ -78,7 +78,7 @@ class RenderProfilePicAction
         # Build Response
         #
         $response = new HttpResponse;
-        $response->setStatusCode(301); // permanently moved
+        $response->setStatusCode(200); // permanently moved
         $response->headers()
             ->insert(FactoryHttpHeader::of(['Location' => $link, ]))
             ->insert(FactoryHttpHeader::of(['Cache-Control' => 'no-cache, no-store, must-revalidate',]))
@@ -89,5 +89,15 @@ class RenderProfilePicAction
         return [
             ListenerDispatch::RESULT_DISPATCH => $response
         ];
+
+        /*
+        header('Content-Type: image/jpeg');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo file_get_contents($link);
+        die;
+        */
     }
 }
