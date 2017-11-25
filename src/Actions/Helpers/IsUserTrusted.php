@@ -9,7 +9,7 @@ class IsUserTrusted
     /** @var iRepoProfiles */
     protected $repoProfiles;
 
-    protected $trustedUsers = [];
+    protected $trustedUsers;
 
 
     /**
@@ -30,10 +30,10 @@ class IsUserTrusted
      *
      * @return boolean
      */
-    function __invoke($userId=null)
+    function __invoke($userId = null)
     {
         $trustedUser = $this->_getTrustedUsers();
-        return in_array($userId, $trustedUser);
+        return in_array( (string) $userId, $trustedUser);
     }
 
 
@@ -41,7 +41,7 @@ class IsUserTrusted
 
     protected function _getTrustedUsers()
     {
-        if ( is_null($this->trustedUsers) )
+        if ( null === $this->trustedUsers )
              $this->trustedUsers  = \Module\Foundation\Actions::config(\Module\Profile\Module::CONF, 'trusted');
 
         return $this->trustedUsers;
