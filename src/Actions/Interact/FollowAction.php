@@ -92,8 +92,25 @@ class FollowAction
         #
         // Leave Untouched if we have same request for these interaction
         // Check Interaction between Incoming(Receiver) and Outgoing(Requester).
-        if (! $e = $this->repoFollows->findOneWithInteraction($userid, $token->getOwnerIdentifier()) )
+        if (! $e = $this->repoFollows->findOneWithInteraction($userid, $token->getOwnerIdentifier()) ) {
             $entity = $this->repoFollows->save($entity);
+
+            // TODO with events
+            $visitorId = (string) $token->getOwnerIdentifier();
+            $profiles  = \Module\Profile\Actions::RetrieveProfiles([$visitorId]);
+            $profiles  = $profiles[$visitorId];
+
+            $userName  = (isset($profiles['fullname']))
+                ? $profiles['fullname']
+                : '@'.$profiles['username'];
+
+            \Module\Fcm\Actions::SendNotification()
+                ->sendSimple(
+                    'دنبال کننده جدید'
+                    , sprintf('هم اکنون %s صفحه شما را دنبال میکند.', $userName)
+                    , [ $userid ]
+                );
+        }
         else
             $entity = $e;
 
