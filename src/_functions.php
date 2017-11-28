@@ -55,7 +55,9 @@ namespace Module\Profile\Avatars
      */
     function toArrayResponseFromAvatarEntity(EntityAvatar $avatars = null)
     {
-        if (null === $avatars) {
+        $medias = $avatars->getMedias();
+
+        if ( null === $avatars || empty($medias) ) {
             $p = null;
             $r = [];
 
@@ -71,7 +73,7 @@ namespace Module\Profile\Avatars
                  ...
                ]
              */
-            $r = \Poirot\TenderBinClient\embedLinkToMediaData( $avatars->getMedias() );
+            $r = \Poirot\TenderBinClient\embedLinkToMediaData($medias);
 
 
             ## Embed Versions Into Response
@@ -86,20 +88,28 @@ namespace Module\Profile\Avatars
             }
 
 
+            $r = array_reverse($r);
+
             $p = current($r); // first as primary profile pic
             /** @var aMediaObject $m */
-            foreach ($r as $m) {
-                if ($m['hash'] !== $avatars->getPrimary())
+            $j = 0;
+            foreach ($r as $i => $m) {
+                if ( $m['hash'] !== $avatars->getPrimary() )
                     continue;
 
+                unset($r[$i]);
                 $p = $m;
+                $j++;
             }
+
+            if ($j > 0)
+                array_unshift($r, $p);
         }
+
 
         return [
             'primary' => $p,
             'medias'  => $r,
         ];
     }
-
 }
