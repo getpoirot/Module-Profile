@@ -93,6 +93,24 @@ class GetMyProfileAction
 
         # Build Response
         #
+
+        $profile = ($entity) ? [
+            'bio'      => (string) $entity->getBio(),
+            'gender'   => (string) $entity->getGender(),
+            'location'   => ($entity->getLocation()) ? [
+                'caption' => $entity->getLocation()->getCaption(),
+                'geo'     => [
+                    'lon' => $entity->getLocation()->getGeo('lon'),
+                    'lat' => $entity->getLocation()->getGeo('lat'),
+                ],
+            ] : null, // TODO With privacy interaction
+            'birthday' => ($entity->getBirthday()) ? [
+                'datetime'  => $entity->getBirthday(),
+                'timestamp' => $entity->getBirthday()->getTimestamp(),
+            ] : null,
+        ] : null;
+
+
         $r = [
             'uid'      => $oauthInfo['user']['uid'],
             'fullname' => ($entity && $entity->getDisplayName()) ? $entity->getDisplayName() : $oauthInfo['user']['fullname'],
@@ -109,21 +127,9 @@ class GetMyProfileAction
             'posts_count'      => $cntPosts,
             'score' => 0, // TODO
 
-            'profile' => ($entity) ? [
-                'bio'      => (string) $entity->getBio(),
-                'gender'   => (string) $entity->getGender(),
-                'location'   => ($entity->getLocation()) ? [
-                    'caption' => $entity->getLocation()->getCaption(),
-                    'geo'     => [
-                        'lon' => $entity->getLocation()->getGeo('lon'),
-                        'lat' => $entity->getLocation()->getGeo('lat'),
-                    ],
-                ] : null, // TODO With privacy interaction
-                'birthday' => ($entity->getBirthday()) ? [
-                    'datetime'  => $entity->getBirthday(),
-                    'timestamp' => $entity->getBirthday()->getTimestamp(),
-                ] : null,
-            ] : null,
+            'profile'  => $profile,
+            'personal' => $profile, // backward compatibility
+
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
 
