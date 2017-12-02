@@ -55,7 +55,7 @@ namespace Module\Profile\Avatars
      */
     function toArrayResponseFromAvatarEntity(EntityAvatar $avatars = null)
     {
-        $medias = $avatars->getMedias();
+        $medias = ($avatars) ? $avatars->getMedias() : [];
 
         if ( null === $avatars || empty($medias) ) {
             $p = null;
