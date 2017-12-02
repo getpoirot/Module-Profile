@@ -74,7 +74,9 @@ class UploadAvatarAction
         if ( $avatar->getAsPrimary() )
             $entity->setPrimary( $binArr['hash'] );
 
+        // SET_STORAGE
         $entity->addMedia(FactoryMediaObject::of([
+            'storage_type' => 'tenderbin',
             'hash'         => $binArr['hash'],
             'content_type' => $binArr['content_type'],
         ]));

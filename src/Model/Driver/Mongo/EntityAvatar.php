@@ -45,7 +45,7 @@ class EntityAvatar
      */
     function bsonUnserialize(array $data)
     {
-        if (isset($data['medias'])) {
+        if ( isset($data['medias']) ) {
             foreach ($data['medias'] as $media)
                 $this->addMedia( FactoryMediaObject::of($media) );
 

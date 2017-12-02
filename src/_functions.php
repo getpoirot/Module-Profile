@@ -73,19 +73,20 @@ namespace Module\Profile\Avatars
                  ...
                ]
              */
-            $r = \Poirot\TenderBinClient\embedLinkToMediaData($medias);
-
 
             ## Embed Versions Into Response
             #
-            foreach ($r as $i => $m) {
-                $link = $m['_link'];
-                $r[$i]['_link'] = [
-                    'origin' => $link,
-//                    'thumb'  => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
-                    'thumb'  => $link.'?ver=thumb',
-                ];
-            }
+            $r = \Poirot\TenderBinClient\embedLinkToMediaData(
+                $medias
+                , function($m) {
+                    $link = $m['_link'];
+                    $m['_link'] = [
+                        'origin' => $link,
+    //                    'thumb'  => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
+                        'thumb'  => $link.'?ver=thumb',
+                    ];
+                }
+            );
 
 
             $r = array_reverse($r);
