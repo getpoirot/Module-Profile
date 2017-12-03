@@ -55,7 +55,7 @@ namespace Module\Profile\Avatars
      */
     function toArrayResponseFromAvatarEntity(EntityAvatar $avatars = null)
     {
-        $medias = ($avatars) ? $avatars->getMedias() : [];
+        $medias = ($avatars !== null) ? $avatars->getMedias() : [];
 
         if ( null === $avatars || empty($medias) ) {
             $p = null;
@@ -85,6 +85,8 @@ namespace Module\Profile\Avatars
     //                    'thumb'  => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
                         'thumb'  => $link.'?ver=thumb',
                     ];
+
+                    return $m;
                 }
             );
 

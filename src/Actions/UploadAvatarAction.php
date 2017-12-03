@@ -1,6 +1,7 @@
 <?php
 namespace Module\Profile\Actions;
 
+use Module\Apanaj\Storage\HandleIrTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Module\Profile\Model\UploadAvatarHydrate;
@@ -16,6 +17,10 @@ use Poirot\TenderBinClient\FactoryMediaObject;
 class UploadAvatarAction
     extends aAction
 {
+//    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
+    const STORAGE_TYPE = 'tenderbin';
+
+
     /** @var iRepoAvatars */
     protected $repoAvatars;
 
@@ -76,7 +81,7 @@ class UploadAvatarAction
 
         // SET_STORAGE
         $entity->addMedia(FactoryMediaObject::of([
-            'storage_type' => 'tenderbin',
+            'storage_type' => self::STORAGE_TYPE,
             'hash'         => $binArr['hash'],
             'content_type' => $binArr['content_type'],
         ]));
@@ -99,7 +104,11 @@ class UploadAvatarAction
 
     function _storeAvatar(UploadAvatarHydrate $avatar, iAccessToken $token)
     {
-        $c = \Module\TenderBinClient\Services::ClientTender();
+        $storageType = self::STORAGE_TYPE;
+        $handler     = FactoryMediaObject::hasHandlerOfStorage($storageType);
+
+
+        $c = $handler->client();
 
         // Request Behalf of User as Owner With Token
         $c->setTokenProvider(new TokenProviderSolid(
