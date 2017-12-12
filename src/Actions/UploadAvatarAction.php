@@ -17,8 +17,8 @@ use Poirot\TenderBinClient\FactoryMediaObject;
 class UploadAvatarAction
     extends aAction
 {
-//    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
-    const STORAGE_TYPE = 'tenderbin';
+    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
+//    const STORAGE_TYPE = 'tenderbin';
 
 
     /** @var iRepoAvatars */
