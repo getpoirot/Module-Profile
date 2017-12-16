@@ -109,6 +109,8 @@ class FollowAction
                     'دنبال کننده جدید'
                     , sprintf('هم اکنون %s صفحه شما را دنبال میکند.', $userName)
                     , [ $userid ]
+                    , 'user'
+                    , $visitorId
                 );
         }
         else
