@@ -109,8 +109,7 @@ class FollowAction
                     'دنبال کننده جدید'
                     , sprintf('هم اکنون %s صفحه شما را دنبال میکند.', $userName)
                     , [ $userid ]
-                    , 'user'
-                    , $visitorId
+                    , ['entityName' => 'user', 'entityId' =>  $visitorId ]
                 );
         }
         else
