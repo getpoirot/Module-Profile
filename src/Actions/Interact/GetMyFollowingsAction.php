@@ -120,7 +120,7 @@ class GetMyFollowingsAction
 
         return [
             ListenerDispatch::RESULT_DISPATCH => [
-                'count'      => $c,
+                'count'      => count($r),
                 'items'      => array_values($r),
                 '_link_more' => $linkMore,
                 '_self' => [
