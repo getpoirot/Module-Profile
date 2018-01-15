@@ -116,7 +116,7 @@ class UploadAvatarAction
         ));
 
         $r = $c->store(
-            fopen($avatar->getPic()->getTmpName(), 'rb')
+            $avatar->getPic()
             , null
             , $avatar->getPic()->getClientFilename()
             , [

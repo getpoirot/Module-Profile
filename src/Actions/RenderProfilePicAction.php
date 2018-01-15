@@ -58,7 +58,6 @@ class RenderProfilePicAction
         $r      = \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($entity);
 
 
-
         # Build Avatar Link
         #
         if ( $r['primary'] ) {
