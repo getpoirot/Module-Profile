@@ -48,6 +48,9 @@ class RetrieveAvatarAction
         $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
 
 
+        \Module\Profile\Avatars\assertPrimaryOnAvatarEntity($entity);
+
+
         # Build Response
         #
         return [

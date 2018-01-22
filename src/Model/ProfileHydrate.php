@@ -10,12 +10,6 @@ class ProfileHydrate
     extends aHydrateEntity
     implements iEntityProfile
 {
-    const FIELD_DISPLAY_NAME = 'bio';
-    const FIELD_BIO          = 'bio';
-    const FIELD_LOCATION     = 'location';
-    const FIELD_GENDER       = 'gender';
-    const FIELD_BIRTHDAY     = 'birthday';
-
     protected $displayName;
     protected $bio;
     protected $location;

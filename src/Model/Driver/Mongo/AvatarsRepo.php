@@ -131,14 +131,18 @@ class AvatarsRepo
     /**
      * Remove an avatar from list by given hash id
      *
+     * note: it has not responsible to update primary
+     * @see ::assertPrimaryOnAvatarEntity it is correction
+     *
      * @param mixed $uid
      * @param mixed $mediaHash
      *
-     * @return void
+     * @return EntityAvatar
      */
     function delUserAvatarByHash($uid, $mediaHash)
     {
-        $this->_query()->findOneAndUpdate(
+        /** @var EntityAvatar $entity */
+        $entity = $this->_query()->findOneAndUpdate(
             [
                 'uid' => $this->attainNextIdentifier( $uid ),
             ]
@@ -147,6 +151,10 @@ class AvatarsRepo
                     'medias' => [ 'hash' => $mediaHash ]
                 ],
             ]
+            , [ 'returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER, ]
         );
+
+
+        return $entity;
     }
 }

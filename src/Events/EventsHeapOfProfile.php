@@ -1,6 +1,7 @@
 <?php
 namespace Module\Profile\Events;
 
+use Module\Profile\Model\Entity\EntityAvatar;
 use Poirot\Events\Event;
 use Poirot\Events\EventHeap;
 use Module\Profile\Model\Entity\EntityProfile;
@@ -9,6 +10,7 @@ use Module\Profile\Model\Entity\EntityProfile;
 class EventsHeapOfProfile
     extends EventHeap
 {
+    const AVATAR_UPLOADED = 'avatar.new';
     const RETRIEVE_PROFILE_RESULT = 'retrieve.profile.result';
 
 
@@ -19,6 +21,11 @@ class EventsHeapOfProfile
     function __init()
     {
         $this->collector = new DataCollector;
+
+        // Avatar:
+        $this->bind( new Event(self::AVATAR_UPLOADED, new Event\BuildEvent([
+            'collector' => new DTofUploadAvatar ])) );
+
 
         // attach default event names:
         $this->bind( new Event(self::RETRIEVE_PROFILE_RESULT) );
@@ -36,6 +43,32 @@ class EventsHeapOfProfile
         return parent::collector($options);
     }
 }
+
+
+class DTofUploadAvatar
+    extends Event\DataCollector
+{
+    /** @var EntityAvatar */
+    protected $avatarEntity;
+
+
+    /**
+     * @return EntityAvatar
+     */
+    function getAvatarEntity()
+    {
+        return $this->avatarEntity;
+    }
+
+    /**
+     * @param mixed $avatarEntity
+     */
+    function setAvatarEntity($avatarEntity)
+    {
+        $this->avatarEntity = $avatarEntity;
+    }
+}
+
 
 class DataCollector
     extends \Poirot\Events\Event\DataCollector

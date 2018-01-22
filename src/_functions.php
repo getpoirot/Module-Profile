@@ -47,6 +47,44 @@ namespace Module\Profile\Avatars
 
 
     /**
+     * Assert Primary For Entity
+     *
+     * @param EntityAvatar $avatars
+     */
+    function assertPrimaryOnAvatarEntity(EntityAvatar $avatars)
+    {
+        $primary = $avatars->getPrimary();
+
+
+        /** @var aMediaObject $m */
+        $found = false;
+        foreach ($avatars->getMedias() as $m) {
+            if (! isset($first) )
+                // keep first media as primary
+                $first = $m->getHash();
+
+            if ($m->getHash() == $primary)
+                $found |= true;
+        }
+
+
+        // ORDER IS MANDATORY
+
+        if ($primary && !$found)
+            // Media Object Associated With Primary Hash No Longer Exists
+            $primary = null;
+
+
+        if (! $primary && isset($first) )
+            // primary not given we choose first!!
+            $primary = $first;
+
+
+        $avatars->setPrimary($primary);
+    }
+
+
+    /**
      * Build Array Response From Given Entity Object
      *
      * @param EntityAvatar $avatars

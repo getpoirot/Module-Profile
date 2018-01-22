@@ -4,6 +4,7 @@ namespace Module\Profile\Actions\Helpers;
 use Module\HttpFoundation\Actions\Url;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityProfile;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class RetrieveProfiles
@@ -105,10 +106,12 @@ class RetrieveProfiles
                 'uid'      => $uid,
                 'fullname' => ($entity && $entity->getDisplayName()) ? $entity->getDisplayName() : $oauthInfo['user']['fullname'],
                 'username' => $oauthInfo['user']['username'],
-                'avatar'   => (string) \Module\HttpFoundation\Actions::url(
-                    'main/profile/delegate/profile_pic'
-                    , [ 'userid' => $uid ]
-                    , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT | Url::ENCODE_URL
+                'avatar'   => ($entity && $entity->getPrimaryAvatar())
+                    ? ($avatar = FactoryMediaObject::of( $entity->getPrimaryAvatar() )->get_Link().'/profile.jpg' )
+                    : (string) \Module\HttpFoundation\Actions::url(
+                        'main/profile/delegate/profile_pic'
+                        , [ 'userid' => $oauthInfo['user']['uid'] ]
+                        , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
                 ),
                 'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                     ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,

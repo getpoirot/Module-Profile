@@ -11,6 +11,7 @@ use Module\Profile\Model\Entity\EntityFollow;
 use Module\Profile\Model\Entity\EntityProfile;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class GetMyProfileAction
@@ -116,12 +117,13 @@ class GetMyProfileAction
             'fullname' => ($entity && $entity->getDisplayName()) ? $entity->getDisplayName() : $oauthInfo['user']['fullname'],
             'username' => $oauthInfo['user']['username'],
             'mobile'   => $oauthInfo['user']['mobile'],
-            'avatar'   => (string) \Module\HttpFoundation\Actions::url(
-                'main/profile/delegate/profile_pic'
-                , [ 'userid' => $oauthInfo['user']['uid'] ]
-                , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
+            'avatar'   => ($entity && $entity->getPrimaryAvatar())
+                ? ($avatar = FactoryMediaObject::of( $entity->getPrimaryAvatar() )->get_Link().'/profile.jpg' )
+                : (string) \Module\HttpFoundation\Actions::url(
+                    'main/profile/delegate/profile_pic'
+                    , [ 'userid' => $oauthInfo['user']['uid'] ]
+                    , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
             ),
-
             'followers_count'  => $cntFollowers,
             'followings_count' => $cntFollowings,
             'posts_count'      => $cntPosts,

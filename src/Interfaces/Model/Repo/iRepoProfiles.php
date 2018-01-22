@@ -6,7 +6,6 @@ use Module\Profile\Interfaces\Model\Entity\iEntityProfile;
 
 interface iRepoProfiles
 {
-
     const MONGO_SORT_ASC  = 1;
     const MONGO_SORT_DESC = -1;
 

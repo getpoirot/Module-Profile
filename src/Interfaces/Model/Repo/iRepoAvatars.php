@@ -41,7 +41,7 @@ interface iRepoAvatars
      * @param mixed $uid
      * @param mixed $mediaHash
      *
-     * @return void
+     * @return EntityAvatar
      */
     function delUserAvatarByHash($uid, $mediaHash);
 }

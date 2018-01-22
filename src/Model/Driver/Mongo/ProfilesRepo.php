@@ -6,7 +6,6 @@ use Module\Profile\Model\Driver\Mongo;
 
 use Module\MongoDriver\Model\Repository\aRepository;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
-use Module\Profile\Model\Entity\EntityProfile;
 use MongoDB\BSON\ObjectID;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Operation\FindOneAndUpdate;
@@ -82,19 +81,7 @@ class ProfilesRepo
         );
 
 
-        $rEntity = new EntityProfile;
-        $rEntity
-            ->setUid( $entity->getUid() )
-            ->setDisplayName( $entity->getDisplayName() )
-            ->setBio( $entity->getBio() )
-            ->setLocation( $entity->getLocation() )
-            ->setGender( $entity->getGender() )
-            ->setPrivacyStatus( $entity->getPrivacyStatus() )
-            ->setBirthday( $entity->getBirthday() )
-            ->setDateTimeCreated( $entity->getDateTimeCreated() )
-        ;
-
-        return $rEntity;
+        return $entity;
     }
 
     /**
@@ -116,19 +103,8 @@ class ProfilesRepo
             // Not Found ...
             return null;
 
-        $rEntity = new EntityProfile;
-        $rEntity
-            ->setUid( $entity->getUid() )
-            ->setDisplayName( $entity->getDisplayName() )
-            ->setBio( $entity->getBio() )
-            ->setLocation( $entity->getLocation() )
-            ->setGender( $entity->getGender() )
-            ->setPrivacyStatus( $entity->getPrivacyStatus() )
-            ->setBirthday( $entity->getBirthday() )
-            ->setDateTimeCreated( $entity->getDateTimeCreated() )
-        ;
 
-        return $rEntity;
+        return $entity;
     }
 
     /**

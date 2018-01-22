@@ -3,6 +3,7 @@ namespace Module\Profile\Actions;
 
 use Module\Apanaj\Storage\HandleIrTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Module\Profile\Events\EventsHeapOfProfile;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Module\Profile\Model\UploadAvatarHydrate;
 use Module\Profile\Model\Entity\EntityAvatar;
@@ -67,7 +68,6 @@ class UploadAvatarAction
         $r      = $this->_storeAvatar($avatar, $token);
         $binArr = $r['bindata'];
 
-
         ## Set Image As Avatar
         #
         $entity = $this->repoAvatars->findOneByOwnerUid( $token->getOwnerIdentifier() );
@@ -79,17 +79,33 @@ class UploadAvatarAction
         if ( $avatar->getAsPrimary() )
             $entity->setPrimary( $binArr['hash'] );
 
+        // TODO add subversions into entity persistence
         // SET_STORAGE
         $entity->addMedia(FactoryMediaObject::of([
             'storage_type' => self::STORAGE_TYPE,
             'hash'         => $binArr['hash'],
             'content_type' => $binArr['content_type'],
+            'meta'         => $binArr['meta']
         ]));
+
+
+        ## Assert For Primary
+        #
+        \Module\Profile\Avatars\assertPrimaryOnAvatarEntity($entity);
 
 
         # Persist Entity
         #
         $pEntity = $this->repoAvatars->save($entity);
+
+
+        ## Event
+        #
+        $this->event()
+            ->trigger(EventsHeapOfProfile::AVATAR_UPLOADED, [
+                'entity_avatar' => $pEntity
+            ])
+        ;
 
 
         # Build Response:
@@ -99,6 +115,7 @@ class UploadAvatarAction
                 \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($pEntity)
         ];
     }
+
 
     // ..
 

@@ -2,6 +2,7 @@
 namespace Module\Profile\Actions;
 
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
+use Module\Profile\Events\EventsHeapOfProfile;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
@@ -45,7 +46,21 @@ class DeleteAvatarAction
 
         # Remove Avatar From Repository
         #
-        $this->repoAvatars->delUserAvatarByHash($token->getOwnerIdentifier(), $hash_id);
+        $pEntity = $this->repoAvatars->delUserAvatarByHash($token->getOwnerIdentifier(), $hash_id);
+
+
+        ## Assert For Primary
+        #
+        \Module\Profile\Avatars\assertPrimaryOnAvatarEntity($pEntity);
+
+
+        ## Event
+        #
+        $this->event()
+            ->trigger(EventsHeapOfProfile::AVATAR_UPLOADED, [
+                'entity_avatar' => $pEntity
+            ])
+        ;
 
 
         # Build Response

@@ -1,5 +1,6 @@
 <?php
 use Module\MongoDriver\Services\aServiceRepository;
+use Module\Profile\Events\AvatarUploaded\OnChangeAvatarEmbedToProfile;
 use Module\Profile\Events\EventsHeapOfProfile;
 
 return [
@@ -20,9 +21,15 @@ return [
             // Events Section Of Events Builder
             /** @see \Poirot\Events\Event\BuildEvent */
 
+            EventsHeapOfProfile::AVATAR_UPLOADED => [
+                'listeners' => [
+                    ['priority' => -1000, 'listener' => OnChangeAvatarEmbedToProfile::class],
+                ],
+            ],
+
             EventsHeapOfProfile::RETRIEVE_PROFILE_RESULT => [
                 'listeners' => [
-                    ['priority' => 1000,  'listener' => function($entityProfile, $visitor) {
+                    ['priority' => 1000, 'listener' => function($entityProfile, $visitor) {
                         // Implement this
                         /** @var \Module\Profile\Model\Entity\EntityProfile $entityProfile */
                     }],

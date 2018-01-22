@@ -8,6 +8,7 @@ use Module\Profile\Model\Entity\EntityProfile;
 use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Interfaces\iHttpRequest;
 use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\TenderBinClient\FactoryMediaObject;
 
 
 class GetFullProfileAction
@@ -85,10 +86,12 @@ class GetFullProfileAction
             'uid'      => $oauthInfo['user']['uid'],
             'fullname' => ($entity && $entity->getDisplayName()) ? $entity->getDisplayName() : $oauthInfo['user']['fullname'],
             'username' => $oauthInfo['user']['username'],
-            'avatar'   => (string) \Module\HttpFoundation\Actions::url(
-                'main/profile/delegate/profile_pic'
-                , [ 'userid' => $oauthInfo['user']['uid'] ]
-                , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
+            'avatar'   => ($entity && $entity->getPrimaryAvatar())
+                ? ($avatar = FactoryMediaObject::of( $entity->getPrimaryAvatar() )->get_Link().'/profile.jpg' )
+                : (string) \Module\HttpFoundation\Actions::url(
+                    'main/profile/delegate/profile_pic'
+                    , [ 'userid' => $oauthInfo['user']['uid'] ]
+                    , Url::ABSOLUTE_URL | Url::DEFAULT_INSTRUCT
             ),
             'privacy_stat' => ($entity && $entity->getPrivacyStatus())
                 ? $entity->getPrivacyStatus() : EntityProfile::PRIVACY_PUBLIC,
