@@ -1,7 +1,6 @@
 <?php
 namespace Module\Profile\Actions;
 
-use Module\Apanaj\Storage\HandleIrTenderBin;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Events\EventsHeapOfProfile;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
@@ -18,10 +17,6 @@ use Poirot\TenderBinClient\FactoryMediaObject;
 class UploadAvatarAction
     extends aAction
 {
-    const STORAGE_TYPE = HandleIrTenderBin::STORAGE_TYPE;
-//    const STORAGE_TYPE = 'tenderbin';
-
-
     /** @var iRepoAvatars */
     protected $repoAvatars;
 
@@ -82,7 +77,6 @@ class UploadAvatarAction
         // TODO add subversions into entity persistence
         // SET_STORAGE
         $entity->addMedia(FactoryMediaObject::of([
-            'storage_type' => self::STORAGE_TYPE,
             'hash'         => $binArr['hash'],
             'content_type' => $binArr['content_type'],
             'meta'         => $binArr['meta']
@@ -121,8 +115,7 @@ class UploadAvatarAction
 
     function _storeAvatar(UploadAvatarHydrate $avatar, iAccessToken $token)
     {
-        $storageType = self::STORAGE_TYPE;
-        $handler     = FactoryMediaObject::hasHandlerOfStorage($storageType);
+        $handler = FactoryMediaObject::getDefaultHandler();
 
 
         $c = $handler->client();
