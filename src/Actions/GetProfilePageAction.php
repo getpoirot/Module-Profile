@@ -1,7 +1,6 @@
 <?php
 namespace Module\Profile\Actions;
 
-use Module\Content\Interfaces\Model\Repo\iRepoPosts;
 use Module\HttpFoundation\Actions\Url;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Events\EventsHeapOfProfile;
@@ -26,8 +25,6 @@ class GetProfilePageAction
     protected $repoProfiles;
     /** @var iRepoFollows */
     protected $repoFollows;
-    /** @var iRepoPosts */
-    protected $repoPosts;
 
 
     /**
@@ -36,15 +33,13 @@ class GetProfilePageAction
      * @param iHttpRequest  $httpRequest  @IoC /HttpRequest
      * @param iRepoProfiles $repoProfiles @IoC /module/profile/services/repository/Profiles
      * @param iRepoFollows  $repoFollows  @IoC /module/profile/services/repository/Follows
-     * @param iRepoPosts    $repoPosts    @IoC /module/content/services/repository/Posts
      */
-    function __construct(iHttpRequest $httpRequest, iRepoProfiles $repoProfiles, iRepoFollows $repoFollows, iRepoPosts $repoPosts)
+    function __construct(iHttpRequest $httpRequest, iRepoProfiles $repoProfiles, iRepoFollows $repoFollows)
     {
         parent::__construct($httpRequest);
 
         $this->repoProfiles = $repoProfiles;
         $this->repoFollows  = $repoFollows;
-        $this->repoPosts = $repoPosts;
     }
 
 
@@ -60,8 +55,6 @@ class GetProfilePageAction
      */
     function __invoke($token = null, $username = null, $userid = null)
     {
-
-
         # Assert Token
         #
         // $this->assertTokenByOwnerAndScope($token);
@@ -130,10 +123,8 @@ class GetProfilePageAction
 
         # Count Statistics
         #
-        // TODO Some data must inject with events attached to this action
         $cntFollowers  = $this->repoFollows->getCountAllForIncoming($userid, [EntityFollow::STAT_ACCEPTED]);
         $cntFollowings = $this->repoFollows->getCountAllForOutgoing($userid, [EntityFollow::STAT_ACCEPTED]);
-        $cntPosts      = $this->repoPosts->getCountMatchWithOwnerId($userid);
 
 
         # Build Response
@@ -157,7 +148,6 @@ class GetProfilePageAction
             'relation' => $relation,
             'followers_count'  => $cntFollowers,
             'followings_count' => $cntFollowings,
-            'posts_count'      => $cntPosts,
             'score' => 0, // TODO
             'profile' => [
                 'bio'      => ($entity) ? (string) $entity->getBio() : null,
