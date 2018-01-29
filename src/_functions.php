@@ -114,20 +114,26 @@ namespace Module\Profile\Avatars
 
             ## Embed Versions Into Response
             #
-            $r = \Poirot\TenderBinClient\embedLinkToMediaData(
-                $medias
-                , function($m) {
-                    $link = $m['_link'];
-                    $m['_link'] = [
-                        'origin' => $link,
-    //                    'thumb'  => 'http://optimizer.'.SERVER_NAME.'/?type=crop&size=400x400&url='.$link.'/file.jpg',
-                        'thumb'  => $link.'?ver=thumb',
-                    ];
+            if (class_exists('\Module\xStorage\Module')) {
+                // Versions added when uploading content
+                $r = \Poirot\TenderBinClient\embedLinkToMediaData(
+                    $medias
+                    , function($m) {
+                        $link = $m['_link'];
+                        $m['_link'] = [
+                            'origin' => $link,
+                            'thumb'  => $link.'?ver=thumb',
+                        ];
 
-                    return $m;
-                }
-            );
-
+                        return $m;
+                    }
+                );
+            } else {
+                // Versions added when uploading content
+                $r = \Poirot\TenderBinClient\embedLinkToMediaData(
+                    $medias
+                );
+            }
 
             $r = array_reverse($r);
 

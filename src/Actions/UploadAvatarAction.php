@@ -104,6 +104,8 @@ class UploadAvatarAction
 
         # Build Response:
         #
+        // TODO result with result-renderer to embed versions into and more
+        //      @see ::toArrayResponseFromAvatarEntity
         return [
             ListenerDispatch::RESULT_DISPATCH =>
                 \Module\Profile\Avatars\toArrayResponseFromAvatarEntity($pEntity)
@@ -137,7 +139,7 @@ class UploadAvatarAction
                      "image/*"
                    ],
                    "then": {
-                     "versions":[{ 
+                     "versions":[{
                           "thumb":     {"optimage": {"type": "crop",   "size": "90x90", "q": 80}}
                     }]
                    }
