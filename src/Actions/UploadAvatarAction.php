@@ -140,7 +140,7 @@ class UploadAvatarAction
                    ],
                    "then": {
                      "versions":[{
-                          "thumb":     {"optimage": {"type": "crop",   "size": "90x90", "q": 80}}
+                          "thumb":     {"optimage": {"type": "crop",   "size": "90x90", "q": 90}}
                     }]
                    }
                  }
