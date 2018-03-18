@@ -90,6 +90,7 @@ class GetProfilePageAction
         $entity = $this->repoProfiles->findOneByUID( $userid );
 
 
+
         # Find Relation Between Users
         #
         if ($visitor == $userid) {

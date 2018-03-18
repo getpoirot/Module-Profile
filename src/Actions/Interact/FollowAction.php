@@ -105,11 +105,14 @@ class FollowAction
                 : '@'.$profiles['username'];
 
             \Module\Fcm\Actions::SendNotification()
-                ->sendSimple(
+                ->sendRouteIncluded(
                     'دنبال کننده جدید'
                     , sprintf('هم اکنون %s صفحه شما را دنبال میکند.', $userName)
                     , [ $userid ]
-                    , ['entityName' => 'user', 'entityId' =>  $visitorId ]
+                    , 'main/profile/delegate/profile_page'
+                    , [
+                        'username' => $profiles['username']
+                    ]
                 );
         }
         else
