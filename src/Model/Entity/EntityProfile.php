@@ -65,7 +65,7 @@ class EntityProfile
      */
     function setDisplayName($name)
     {
-        $this->displayName = (string) $name;
+        $this->displayName = ($name !== null) ? (string) $name : $name;
         return $this;
     }
 

@@ -56,26 +56,33 @@ class RegisterAction
                 ProfileHydrate::parseWith($this->request)
             );
 
-            $displayName = $hydrate->getDisplayName();
-            if (empty($displayName)) {
-                // Retrieve Name From OAuth
-                $displayName = \Poirot\Std\catchIt(function() use ($uid) {
-                    $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($uid) {
-                        $info = \Module\OAuth2Client\Services::OAuthFederate()
-                            ->getAccountInfoByUid($uid);
+            if (! $this->repoProfiles->findOneByUID($uid) )
+            {
+                // Try To Find Display Name From OAuth Server
+                //
+                // TODO it can be moved to initializing or somewhere else when we for first time create user profile
+                $displayName = $hydrate->getDisplayName();
+                if (empty($displayName)) {
+                    // Retrieve Name From OAuth
+                    $displayName = \Poirot\Std\catchIt(function() use ($uid) {
+                        $nameFromOAuthServer = \Poirot\Std\reTry(function () use ($uid) {
+                            $info = \Module\OAuth2Client\Services::OAuthFederate()
+                                ->getAccountInfoByUid($uid);
 
-                        return $info['user']['fullname'];
+                            return $info['user']['fullname'];
+                        });
+
+                        return $nameFromOAuthServer;
+
+                    }, function () {
+                        return '';
                     });
 
-                    return $nameFromOAuthServer;
 
-                }, function () {
-                    return '';
-                });
-
-
-                $hydrate->setDisplayName($displayName);
+                    $hydrate->setDisplayName($displayName);
+                }
             }
+
 
             $entity = new EntityProfile($hydrate);
             $entity->setUid( $uid ); // Set User Who Has Own Profile!!
