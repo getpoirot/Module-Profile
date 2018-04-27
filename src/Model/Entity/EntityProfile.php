@@ -152,7 +152,7 @@ class EntityProfile
      */
     function getGender()
     {
-        return ( ($this->gender) ? (string) $this->gender : null );
+        return ( (null !== $this->gender) ? (string) $this->gender : null );
     }
 
     /**
