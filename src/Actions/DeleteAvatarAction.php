@@ -5,7 +5,7 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Events\EventsHeapOfProfile;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class DeleteAvatarAction
@@ -32,7 +32,7 @@ class DeleteAvatarAction
     /**
      * Delete Avatar By Owner
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

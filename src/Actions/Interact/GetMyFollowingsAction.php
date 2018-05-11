@@ -7,7 +7,7 @@ use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Http\HttpMessage\Request\Plugin\ParseRequestData;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class GetMyFollowingsAction
@@ -34,7 +34,7 @@ class GetMyFollowingsAction
     /**
      * Retrieve Followers
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

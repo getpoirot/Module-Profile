@@ -7,7 +7,7 @@ use Poirot\Events\Event\BuildEvent;
 use Poirot\Events\Event\MeeterIoc;
 use Poirot\Events\Interfaces\Respec\iEventProvider;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 abstract class aAction
@@ -68,7 +68,7 @@ abstract class aAction
     /**
      * Assert Token
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @throws exAccessDenied
      */

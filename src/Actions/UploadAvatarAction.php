@@ -9,7 +9,7 @@ use Module\Profile\Model\Entity\EntityAvatar;
 use Poirot\ApiClient\AccessTokenObject;
 use Poirot\ApiClient\TokenProviderSolid;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 use Poirot\TenderBinClient\FactoryMediaObject;
 
@@ -38,7 +38,7 @@ class UploadAvatarAction
     /**
      * Register User Profile
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception
@@ -115,7 +115,7 @@ class UploadAvatarAction
 
     // ..
 
-    function _storeAvatar(UploadAvatarHydrate $avatar, iAccessToken $token)
+    function _storeAvatar(UploadAvatarHydrate $avatar, iAccessTokenEntity $token)
     {
         $handler = FactoryMediaObject::getDefaultHandler();
 

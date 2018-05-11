@@ -7,7 +7,7 @@ use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class CancelFollowingReqAction
@@ -34,7 +34,7 @@ class CancelFollowingReqAction
     /**
      * Change Follow Request Status
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      * @param mixed        $request_id
      *
      * @return array

@@ -8,7 +8,7 @@ use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Driver\Mongo\EntityProfile;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class FollowAction
@@ -39,7 +39,7 @@ class FollowAction
     /**
      * Send Follow Request To An User
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      * @param string       $username Uri param
      * @param string       $userid   Uri param
      *

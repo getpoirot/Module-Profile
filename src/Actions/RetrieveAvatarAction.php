@@ -4,7 +4,7 @@ namespace Module\Profile\Actions;
 use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class RetrieveAvatarAction
@@ -31,7 +31,7 @@ class RetrieveAvatarAction
     /**
      * Retrieve avatar
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

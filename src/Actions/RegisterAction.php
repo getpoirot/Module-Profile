@@ -7,7 +7,7 @@ use Module\Profile\Model\Entity\EntityProfile;
 use Module\Profile\Model\ProfileHydrate;
 use Module\Profile\Model\ProfileValidate;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 
 
@@ -35,7 +35,7 @@ class RegisterAction
     /**
      * Register User Profile
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

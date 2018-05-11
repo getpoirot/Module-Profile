@@ -6,7 +6,7 @@ use Module\HttpFoundation\Events\Listener\ListenerDispatch;
 use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Poirot\Http\Header\FactoryHttpHeader;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class RenderProfilePicAction
@@ -33,7 +33,7 @@ class RenderProfilePicAction
     /**
      * Delete Avatar By Owner
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      * @param string       $username Uri param
      * @param string       $userid   Uri param
      *

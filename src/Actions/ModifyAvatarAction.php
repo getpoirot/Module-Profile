@@ -7,7 +7,7 @@ use Module\Profile\Interfaces\Model\Repo\iRepoAvatars;
 use Module\Profile\Model\UploadAvatarHydrate;
 use Poirot\Application\Exception\exRouteNotMatch;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 use Poirot\Std\Exceptions\exUnexpectedValue;
 use Poirot\TenderBinClient\Model\aMediaObject;
 
@@ -36,7 +36,7 @@ class ModifyAvatarAction
     /**
      * Delete Avatar By Owner
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

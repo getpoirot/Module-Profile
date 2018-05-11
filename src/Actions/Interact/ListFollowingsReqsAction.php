@@ -6,7 +6,7 @@ use Module\Profile\Actions\aAction;
 use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class ListFollowingsReqsAction
@@ -33,7 +33,7 @@ class ListFollowingsReqsAction
     /**
      * Send Follow Request To An User
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      *
      * @return array
      * @throws \Exception

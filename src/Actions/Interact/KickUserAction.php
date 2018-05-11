@@ -7,7 +7,7 @@ use Module\Profile\Interfaces\Model\Repo\iRepoFollows;
 use Module\Profile\Interfaces\Model\Repo\iRepoProfiles;
 use Module\Profile\Model\Entity\EntityFollow;
 use Poirot\Http\Interfaces\iHttpRequest;
-use Poirot\OAuth2Client\Interfaces\iAccessToken;
+use Poirot\OAuth2Client\Interfaces\iAccessTokenEntity;
 
 
 class KickUserAction
@@ -38,7 +38,7 @@ class KickUserAction
     /**
      *
      *
-     * @param iAccessToken $token
+     * @param iAccessTokenEntity $token
      * @param string       $username Uri param
      * @param string       $userid   Uri param
      *
