@@ -70,7 +70,7 @@ class RenderProfilePicAction
         else
             // Default None-Profile Picture
             // TODO Configurable with merged config
-            $link = 'http://'.SERVER_NAME.'/release/no_avatar.jpg';
+            $link = \Module\HttpFoundation\getServerUrl().'/no_avatar.jpg';
 
 
         # Build Response
